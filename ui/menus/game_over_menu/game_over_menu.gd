@@ -4,9 +4,12 @@ extends CanvasLayer
 ## Guarda esses valores ouvindo o EventBus durante a partida, sem conhecer
 ## player nem spawner. process_mode = Always para funcionar pausada.
 
+@export_file("*.tscn") var main_menu_scene: String = "res://ui/menus/main_menu/main_menu.tscn"
+
 @onready var time_label: Label = %TimeLabel
 @onready var level_label: Label = %LevelLabel
 @onready var restart_button: Button = %RestartButton
+@onready var main_menu_button: Button = %MainMenuButton
 
 var _seconds: int = 0
 var _level: int = 1
@@ -18,6 +21,7 @@ func _ready() -> void:
 	EventBus.player_xp_changed.connect(_on_player_xp_changed)
 	EventBus.player_died.connect(_on_player_died)
 	restart_button.pressed.connect(_on_restart_pressed)
+	main_menu_button.pressed.connect(_on_main_menu_pressed)
 
 
 func _on_run_time_changed(seconds: int) -> void:
@@ -43,3 +47,8 @@ func _on_player_died() -> void:
 func _on_restart_pressed() -> void:
 	get_tree().paused = false
 	get_tree().reload_current_scene()
+
+
+func _on_main_menu_pressed() -> void:
+	get_tree().paused = false
+	get_tree().change_scene_to_file(main_menu_scene)

@@ -11,6 +11,9 @@ Ao implementar uma, marcar no Roadmap do `CLAUDE.md` e apagar daqui.
 - **Infinito (Gojo):** escudo que deixa inimigos lentos perto do player.
 - **Vazio Imenso (Domain Expansion):** especial com recarga longa que congela a tela por alguns segundos.
 
+- **Silhueta preta** nos personagens bloqueados da seleção (modelo 3D pintado de preto, como no Megabonk).
+- **2º personagem jogável:** o player passa a ler `GameManager.selected_character` (modelo, arma inicial, status).
+
 ## 🔫 Armas
 - 🔴 **Vermelho:** rajada que empurra inimigos (knockback).
 - 🟣 **Roxo:** raio lento e enorme que atravessa tudo; possível "evolução" de Azul + Vermelho.
@@ -43,7 +46,6 @@ Ao implementar uma, marcar no Roadmap do `CLAUDE.md` e apagar daqui.
 - **Nível máximo por upgrade** (ex.: "Força 3/5") e upgrades que exigem outro antes.
 
 ## 🗺️ Estrutura e meta
-- 🏠 **Menu principal** (Jogar / Sair) e pausa no **Esc**.
 - 🏆 **Recorde salvo** ("Seu melhor: 07:32").
 - 🗺️ **Mapa com obstáculos** (árvores, pedras).
 - 💰 **Moedas entre partidas** para melhorias permanentes (estilo Megabonk).

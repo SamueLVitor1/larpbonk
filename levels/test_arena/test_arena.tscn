@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" path="res://ui/menus/game_over_menu/game_over_menu.tscn" id="9_game_over"]
 [ext_resource type="PackedScene" path="res://ui/damage_numbers/damage_number_spawner.tscn" id="10_damage_numbers"]
 [ext_resource type="PackedScene" path="res://effects/death_puff/death_puff_spawner.tscn" id="11_death_puff"]
+[ext_resource type="PackedScene" path="res://ui/menus/pause_menu/pause_menu.tscn" id="12_pause_menu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 
@@ -76,3 +77,5 @@ config = ExtResource("4_spawn_config")
 [node name="DamageNumberSpawner" parent="." instance=ExtResource("10_damage_numbers")]
 
 [node name="DeathPuffSpawner" parent="." instance=ExtResource("11_death_puff")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("12_pause_menu")]

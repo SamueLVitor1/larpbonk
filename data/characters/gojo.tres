@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="CharacterData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://entities/player/character_data.gd" id="1_character"]
+[ext_resource type="PackedScene" path="res://assets/models/gojo_animado.glb" id="2_model"]
+
+[resource]
+script = ExtResource("1_character")
+display_name = "Gojo"
+description = "O mais forte. Com o Infinito sempre ativo, ele dispara orbes azuis automáticas no porco mais próximo. Os porcos que se cuidem."
+model_scene = ExtResource("2_model")
+model_scale = 0.268
+idle_animation = "idle-loop"

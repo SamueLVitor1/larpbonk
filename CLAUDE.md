@@ -18,7 +18,7 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 | `effects/` | Efeitos visuais (partículas), ex.: `death_puff/` |
 | `levels/` | Mapas/arenas (`test_arena/` para protótipo) |
 | `ui/` | `hud/` e `menus/` |
-| `autoload/` | Singletons globais — manter o mínimo (`game_manager`, `event_bus`) |
+| `autoload/` | Singletons globais — manter o mínimo: `EventBus` (sinais) e `GameManager` (estado entre cenas) |
 
 ## Convenções
 
@@ -95,7 +95,7 @@ Feito em passos pequenos, cada um testado no jogo antes do próximo (e um commit
   - [x] 7.1 Barra de vida do player na HUD (via `EventBus`)
   - [x] 7.2 Cronômetro da partida na HUD
   - [x] 7.3 Game over: ao morrer, pausa e mostra tela com tempo sobrevivido e nível (`GameOverMenu`)
-  - [x] 7.4 Botão "Jogar de novo" (recarrega a cena). "Sair" fica para quando houver menu principal
+  - [x] 7.4 Botão "Jogar de novo" (recarrega a cena)
   - [x] 7.5 `game_manager`: **não precisou** — o estado da partida vive nos sistemas e conversa pelo `EventBus`; recarregar a cena zera tudo
 
 - [x] **8. Game feel**
@@ -104,11 +104,21 @@ Feito em passos pequenos, cada um testado no jogo antes do próximo (e um commit
   - [x] 8.3 "Puf" de partículas ao morrer (`effects/death_puff/`, `GPUParticles3D` one-shot com pool)
   - [x] 8.4 Câmera treme quando o player toma dano (`h_offset`/`v_offset` no `CameraRig`)
 
+- [x] **9. Menus**
+  - [x] 9.1 Menu principal (`ui/menus/main_menu/`): Jogar / Sair; é a cena principal do projeto
+  - [x] 9.2 Pausa no Esc: Continuar / Recomeçar / Menu principal (`ui/menus/pause_menu/`; só abre se nada mais pausou o jogo)
+  - [x] 9.3 Game over com botão "Menu principal"
+- [x] **10. Seleção de personagem**
+  - [x] 10.1 `CharacterData` (`entities/player/character_data.gd`) + `data/characters/gojo.tres`
+  - [x] 10.2 Tela `ui/menus/character_select/`: quadradinhos (+2 com cadeado) e vitrine 3D girando com nome/descrição
+  - [x] 10.3 `GameManager` (autoload) guarda `selected_character`. **O player ainda não lê** (só existe o Gojo); ao criar o 2º personagem, o player deve trocar modelo/arma a partir dele
+
 **Depois:** escolher itens do [BACKLOG.md](BACKLOG.md) (ex.: separação entre inimigos, mais inimigos, mais armas, menu principal).
 
 ### Lembretes para continuar
 - Mudou `project.godot` (autoload, layers)? **Projeto → Recarregar Projeto Atual** no Godot.
 - Se o Godot perguntar para recarregar uma cena alterada fora dele, escolha **recarregar** (não salvar por cima).
+- ▶️ abre o menu principal; para testar direto a arena, abra `test_arena.tscn` e use **Rodar cena atual** (Cmd+R / F6).
 - Testes rápidos: **K** mata todos; overlay mostra FPS/inimigos; para estresse, Config do spawner → `stress_spawn.tres`.
 
 ## Ideias futuras
