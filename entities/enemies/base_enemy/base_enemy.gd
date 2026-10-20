@@ -16,6 +16,7 @@ var _move_speed: float = 3.0
 
 
 func _ready() -> void:
+	add_to_group("enemies")
 	_apply_stats()
 	health.died.connect(_on_died)
 
