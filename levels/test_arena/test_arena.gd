@@ -14,7 +14,7 @@ func _ready() -> void:
 func _create_debug_overlay() -> void:
 	var layer := CanvasLayer.new()
 	_debug_label = Label.new()
-	_debug_label.position = Vector2(12, 8)
+	_debug_label.position = Vector2(12, 22)
 	_debug_label.add_theme_font_size_override("font_size", 20)
 	_debug_label.add_theme_color_override("font_outline_color", Color.BLACK)
 	_debug_label.add_theme_constant_override("outline_size", 6)

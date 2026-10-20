@@ -12,8 +12,6 @@ extends CharacterBody3D
 ## Ajuste se o modelo andar de costas ou de lado (ex.: 180).
 @export var model_yaw_offset_deg: float = 0.0
 
-## XP total coletado. Temporário: no passo 6.3 vira um sistema de níveis.
-var xp: float = 0.0
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 @onready var model: Node3D = $Model
@@ -27,7 +25,6 @@ func _ready() -> void:
 	add_to_group("player")
 	health.damaged.connect(_on_damaged)
 	health.died.connect(_on_died)
-	EventBus.xp_collected.connect(_on_xp_collected)
 
 
 func _physics_process(delta: float) -> void:
@@ -81,8 +78,3 @@ func _on_damaged(amount: float) -> void:
 func _on_died() -> void:
 	# Por enquanto só avisa; o game over de verdade vem no passo 7 (HUD).
 	print("Player morreu!")
-
-
-func _on_xp_collected(amount: float) -> void:
-	xp += amount
-	print("XP: %.0f" % xp)
