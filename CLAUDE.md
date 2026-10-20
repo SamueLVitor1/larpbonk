@@ -12,7 +12,7 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 | `assets/` | Arquivos brutos importados, sem lógica: `models/` (.glb do Blender), `textures/`, `audio/music`, `audio/sfx`, `fonts/`, `shaders/` |
 | `entities/` | Coisas que vivem no mundo: `player/`, `enemies/` (`base_enemy/` + um subdiretório por inimigo), `pickups/` (XP, baús, cura) |
 | `weapons/` | Armas automáticas (`base_weapon/`) e `projectiles/` |
-| `systems/` | Lógica não-visual: `spawner/` (ondas), `pooling/` (reuso de objetos), `upgrades/` |
+| `systems/` | Lógica não-visual: `spawner/` (ondas), `pooling/` (reuso de objetos), `upgrades/`, `terrain/` (relevo + espalhar vegetação) |
 | `components/` | Nós reutilizáveis por composição: `health_component/`, `hurtbox_component/` (recebe dano), `hitbox_component/` (causa dano) |
 | `data/` | Resources `.tres` com números do jogo (vida, dano, velocidade); sem código |
 | `effects/` | Efeitos visuais (partículas), ex.: `death_puff/` |
@@ -29,7 +29,7 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - Preferir composição (componentes) a hierarquias de herança profundas.
 - Status/balanceamento ficam em `data/` (Resources `.tres`), não hardcoded em scripts. O script que define o Resource fica junto da entidade (ex.: `base_enemy/enemy_stats.gd` → `data/enemies/pig.tres`).
 - Cada inimigo é uma **cena herdada** de `base_enemy.tscn` (base + modelo em `Model` + seu `.tres`), ex.: `enemies/pig/pig.tscn`. Não pendurar nós dentro de cenas instanciadas direto no level: o Godot descarta ao salvar.
-- Cada mapa é uma **cena herdada** de `levels/base_level/base_level.tscn` (player, spawners, HUD, menus, debug) e só acrescenta o cenário (`WorldEnvironment`, luz, chão, obstáculos). Sistema novo comum a todos os mapas entra na base. Mapa fechado define `spawn_bounds` (área X/Z) no `EnemySpawner` herdado; tamanho zero = sem limite.
+- Cada mapa é uma **cena herdada** de `levels/base_level/base_level.tscn` (player, spawners, HUD, menus, debug) e só acrescenta o cenário (`WorldEnvironment`, luz, chão, obstáculos). Sistema novo comum a todos os mapas entra na base. Mapa fechado define `spawn_areas` (lista de `Rect2` X/Z; vale estar em qualquer uma) no `EnemySpawner` herdado; lista vazia = sem limite.
 - Modelos `.glb`: uma malha só, transforms aplicados, origem embaixo no centro (onde "pisa").
 - Comunicação entre sistemas desacoplados via sinais do `event_bus`.
 - `.gitkeep` mantém pastas vazias no Git; pode remover quando a pasta tiver arquivos.
@@ -42,6 +42,8 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - O pool é `Node` (não `Node3D`) de propósito: os filhos não herdam a posição de quem está acima (balas não andam junto com o player).
 - **Morte/sumir durante colisão → `call_deferred`:** desligar áreas no meio da checagem de colisão dá erro no Godot.
 - **`HitboxComponent.hit_once`:** ligado = um acerto e para (bala, `reset()` ao reutilizar); desligado = dano contínuo (contato do inimigo, limitado pela invulnerabilidade do alvo).
+- **Relevo (`HeightTerrain`, `@tool`):** ruído + `TerrainArea` (plano/platô/rampa/lago) → malha low-poly, colisão do player e grade de alturas. Quem não usa física (inimigos, spawner, gemas) pergunta `HeightTerrain.ground_height(x, z)`; sem terreno = 0. Mudou algo e não atualizou no editor → botão **Regerar terreno** no Inspetor.
+- **`TerrainScatter`** (filho do terreno): espalha uma cena (com colisão) ou uma malha (`MultiMesh`, ex.: grama) com semente fixa; as cópias não ficam salvas no `.tscn`.
 - **Debug** (só no editor, em `base_level.gd`, vale para todo mapa): tecla **K** mata todos os inimigos; overlay com FPS e nº de inimigos. Para estresse, trocar o Config do spawner por `data/spawner/stress_spawn.tres`.
 
 ## Camadas de colisão (3D)
@@ -59,7 +61,7 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - Inimigos, projéteis e gemas de XP passam por pooling; evitar `instantiate()`/`queue_free()` em massa.
 - Inimigos não usam física completa por unidade; preferir movimento simples no código.
 - Considerar `MultiMeshInstance3D` para muitos inimigos iguais.
-- Meta de protótipo: 300–500 inimigos na tela com FPS estável. **Medido:** 500 porcos a ~81 FPS (debug, Mac M2), ainda sem MultiMesh. Repetir o teste quando os inimigos pararem de se sobrepor.
+- Meta de protótipo: 300–500 inimigos na tela com FPS estável. **Medido:** 500 porcos a ~81 FPS (debug, Mac M2), ainda sem MultiMesh. Repetir o teste quando os inimigos pararem de se sobrepor. No Windows (Intel Iris Xe, debug, sem vsync): 500 porcos a ~86 FPS na `test_arena` e no pátio do templo, ~67 FPS no meio do jardim (vegetação + sombras).
 
 ## Roadmap (progresso)
 
@@ -117,6 +119,8 @@ Feito em passos pequenos, cada um testado no jogo antes do próximo (e um commit
 - [x] **11. Mapas**
   - [x] 11.1 `BaseLevel` (`levels/base_level/`) com os sistemas comuns; `test_arena` vira cena herdada só com o cenário
   - [x] 11.2 Templo (`levels/temple/`): pátio 80×80 fechado por muro, peças reutilizáveis em `props/` (muro, pilar, lanterna, torii) com colisão para o player; `EnemySpawner.spawn_bounds` impede porcos fora do mapa. A seleção de personagem abre o templo. **Inimigos e balas ainda atravessam obstáculos** (sem física)
+  - [x] 11.3 Relevo: `HeightTerrain` + `TerrainArea` (`systems/terrain/`); inimigos, spawner e gemas seguem a altura do chão
+  - [x] 11.4 Jardim ao norte do templo (160×120): morros, platô de 10 m com rampa, cachoeira (`props/waterfall.tscn` + `assets/shaders/water.gdshader`), lago raso, vegetação via `TerrainScatter`, sebe + paredes invisíveis na borda. `spawn_areas` com 2 retângulos (templo + jardim)
 
 **Depois:** escolher itens do [BACKLOG.md](BACKLOG.md) (ex.: separação entre inimigos, mais inimigos, mais armas, menu principal).
 

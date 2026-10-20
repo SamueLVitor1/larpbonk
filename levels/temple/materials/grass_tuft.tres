@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "grass_tuft"
+albedo_color = Color(0.36, 0.6, 0.26, 1)
+roughness = 1.0
+cull_mode = 2

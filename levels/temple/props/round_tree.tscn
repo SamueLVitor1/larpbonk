@@ -1,0 +1,53 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://levels/temple/materials/bark.tres" id="1_bark"]
+[ext_resource type="Material" path="res://levels/temple/materials/foliage_light.tres" id="2_leaf"]
+[ext_resource type="Material" path="res://levels/temple/materials/blossom.tres" id="3_blossom"]
+
+[sub_resource type="CylinderMesh" id="Mesh_trunk"]
+material = ExtResource("1_bark")
+top_radius = 0.22
+bottom_radius = 0.32
+height = 2.4
+radial_segments = 6
+rings = 0
+
+[sub_resource type="SphereMesh" id="Mesh_crown"]
+material = ExtResource("2_leaf")
+radius = 1.6
+height = 3.2
+radial_segments = 6
+rings = 3
+
+[sub_resource type="SphereMesh" id="Mesh_blossom"]
+material = ExtResource("3_blossom")
+radius = 0.9
+height = 1.8
+radial_segments = 6
+rings = 3
+
+[sub_resource type="CylinderShape3D" id="Shape_trunk"]
+height = 2.4
+radius = 0.4
+
+[node name="RoundTree" type="StaticBody3D"]
+
+[node name="Trunk" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+mesh = SubResource("Mesh_trunk")
+
+
+[node name="Crown" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, 0)
+mesh = SubResource("Mesh_crown")
+
+
+[node name="Blossom" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 3.9, 0.3)
+mesh = SubResource("Mesh_blossom")
+
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+shape = SubResource("Shape_trunk")
+

@@ -7,6 +7,18 @@
 [ext_resource type="PackedScene" path="res://levels/temple/props/torii.tscn" id="5_torii"]
 [ext_resource type="Material" path="res://levels/temple/materials/floor.tres" id="6_floor"]
 [ext_resource type="Material" path="res://levels/temple/materials/path.tres" id="7_path"]
+[ext_resource type="Script" path="res://systems/terrain/height_terrain.gd" id="8_terrain"]
+[ext_resource type="Script" path="res://systems/terrain/terrain_area.gd" id="9_area"]
+[ext_resource type="Script" path="res://systems/terrain/terrain_scatter.gd" id="10_scatter"]
+[ext_resource type="PackedScene" path="res://levels/temple/props/pine_tree.tscn" id="11_pine"]
+[ext_resource type="PackedScene" path="res://levels/temple/props/round_tree.tscn" id="12_round"]
+[ext_resource type="PackedScene" path="res://levels/temple/props/bush.tscn" id="13_bush"]
+[ext_resource type="PackedScene" path="res://levels/temple/props/rock.tscn" id="14_rock"]
+[ext_resource type="CylinderMesh" path="res://levels/temple/props/grass_tuft.tres" id="15_grass"]
+[ext_resource type="PackedScene" path="res://levels/temple/props/hedge_segment.tscn" id="16_hedge"]
+[ext_resource type="PackedScene" path="res://levels/temple/props/waterfall.tscn" id="17_waterfall"]
+[ext_resource type="Material" path="res://levels/temple/materials/water_pond.tres" id="18_pond"]
+[ext_resource type="Material" path="res://levels/temple/materials/water_stream.tres" id="19_stream"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 sky_top_color = Color(0.22, 0.2, 0.42, 1)
@@ -30,11 +42,11 @@ fog_density = 0.0035
 fog_sky_affect = 0.25
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
-size = Vector3(84, 1, 84)
+size = Vector3(84, 1, 82)
 
 [sub_resource type="BoxMesh" id="BoxMesh_floor"]
 material = ExtResource("6_floor")
-size = Vector3(84, 1, 84)
+size = Vector3(84, 1, 82)
 
 [sub_resource type="BoxMesh" id="BoxMesh_path"]
 material = ExtResource("7_path")
@@ -44,10 +56,79 @@ size = Vector3(6, 0.04, 80)
 material = ExtResource("7_path")
 size = Vector3(18, 0.04, 18)
 
+[sub_resource type="BoxMesh" id="BoxMesh_garden_path"]
+material = ExtResource("7_path")
+size = Vector3(5, 0.04, 80)
+
+[sub_resource type="FastNoiseLite" id="Noise_garden"]
+seed = 7
+frequency = 0.025
+
+[sub_resource type="Resource" id="Area_south_flat"]
+script = ExtResource("9_area")
+rect = Rect2(-80, 50, 160, 10)
+height = 0
+falloff = 10
+
+[sub_resource type="Resource" id="Area_west_flat"]
+script = ExtResource("9_area")
+rect = Rect2(-80, -60, 4, 120)
+height = 0
+falloff = 6
+
+[sub_resource type="Resource" id="Area_east_flat"]
+script = ExtResource("9_area")
+rect = Rect2(76, -60, 4, 120)
+height = 0
+falloff = 6
+
+[sub_resource type="Resource" id="Area_path"]
+script = ExtResource("9_area")
+rect = Rect2(-3.5, -28, 7, 88)
+height = 0
+falloff = 5
+
+[sub_resource type="Resource" id="Area_plateau"]
+script = ExtResource("9_area")
+rect = Rect2(-80, -60, 160, 20)
+height = 10
+falloff = 2.5
+
+[sub_resource type="Resource" id="Area_ramp"]
+script = ExtResource("9_area")
+rect = Rect2(44, -40, 10, 30)
+height = 10
+falloff = 2
+ramp = true
+height_end = 0
+
+[sub_resource type="Resource" id="Area_pond"]
+script = ExtResource("9_area")
+rect = Rect2(-12, -36, 24, 14)
+height = -1.2
+falloff = 3
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_stream"]
+material = ExtResource("19_stream")
+size = Vector2(6, 20.25)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_pond"]
+material = ExtResource("18_pond")
+size = Vector2(30, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_side"]
+size = Vector3(2, 40, 124)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_north"]
+size = Vector3(164, 40, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_south"]
+size = Vector3(40, 40, 2)
+
 [node name="Temple" instance=ExtResource("1_base")]
 
 [node name="EnemySpawner" parent="." index="1"]
-spawn_bounds = Rect2(-38.5, -38.5, 77, 77)
+spawn_areas = Array[Rect2]([Rect2(-38.5, -38.5, 77, 77), Rect2(-78.5, -158.5, 157, 120)])
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_1")
@@ -57,9 +138,10 @@ transform = Transform3D(0.819152, -0.303949, 0.48642, 0, 0.848048, 0.529919, -0.
 light_color = Color(1, 0.78, 0.58, 1)
 light_energy = 1.2
 shadow_enabled = true
+directional_shadow_max_distance = 120.0
 
 [node name="Floor" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 1)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
 shape = SubResource("BoxShape3D_floor")
@@ -75,37 +157,11 @@ mesh = SubResource("BoxMesh_path")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.025, 0)
 mesh = SubResource("BoxMesh_plaza")
 
+[node name="GardenPath" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, -80)
+mesh = SubResource("BoxMesh_garden_path")
+
 [node name="Walls" type="Node3D" parent="."]
-
-[node name="North1" parent="Walls" instance=ExtResource("2_wall")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36, 0, -40.5)
-
-[node name="North2" parent="Walls" instance=ExtResource("2_wall")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, -40.5)
-
-[node name="North3" parent="Walls" instance=ExtResource("2_wall")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, -40.5)
-
-[node name="North4" parent="Walls" instance=ExtResource("2_wall")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, -40.5)
-
-[node name="North5" parent="Walls" instance=ExtResource("2_wall")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -40.5)
-
-[node name="North6" parent="Walls" instance=ExtResource("2_wall")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -40.5)
-
-[node name="North7" parent="Walls" instance=ExtResource("2_wall")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -40.5)
-
-[node name="North8" parent="Walls" instance=ExtResource("2_wall")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, -40.5)
-
-[node name="North9" parent="Walls" instance=ExtResource("2_wall")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0, -40.5)
-
-[node name="North10" parent="Walls" instance=ExtResource("2_wall")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0, -40.5)
 
 [node name="South1" parent="Walls" instance=ExtResource("2_wall")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36, 0, 40.5)
@@ -291,6 +347,54 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 0)
 [node name="Lantern12" parent="Lanterns" instance=ExtResource("4_lantern")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 0)
 
+[node name="Lantern13" parent="Lanterns" instance=ExtResource("4_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36, 0, -41)
+
+[node name="Lantern14" parent="Lanterns" instance=ExtResource("4_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 0, -41)
+
+[node name="Lantern15" parent="Lanterns" instance=ExtResource("4_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, -41)
+
+[node name="Lantern16" parent="Lanterns" instance=ExtResource("4_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, -41)
+
+[node name="Lantern17" parent="Lanterns" instance=ExtResource("4_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -41)
+
+[node name="Lantern18" parent="Lanterns" instance=ExtResource("4_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, -41)
+
+[node name="Lantern19" parent="Lanterns" instance=ExtResource("4_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0, -41)
+
+[node name="Lantern20" parent="Lanterns" instance=ExtResource("4_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0, -41)
+
+[node name="Lantern21" parent="Lanterns" instance=ExtResource("4_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, -54)
+
+[node name="Lantern22" parent="Lanterns" instance=ExtResource("4_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, -54)
+
+[node name="Lantern23" parent="Lanterns" instance=ExtResource("4_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, -72)
+
+[node name="Lantern24" parent="Lanterns" instance=ExtResource("4_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, -72)
+
+[node name="Lantern25" parent="Lanterns" instance=ExtResource("4_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, -90)
+
+[node name="Lantern26" parent="Lanterns" instance=ExtResource("4_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, -90)
+
+[node name="Lantern27" parent="Lanterns" instance=ExtResource("4_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0, -106)
+
+[node name="Lantern28" parent="Lanterns" instance=ExtResource("4_lantern")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0, -106)
+
 [node name="Gates" type="Node3D" parent="."]
 
 [node name="Torii1" parent="Gates" instance=ExtResource("5_torii")]
@@ -298,3 +402,290 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 
 [node name="Torii2" parent="Gates" instance=ExtResource("5_torii")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 26)
+
+[node name="Torii3" parent="Gates" instance=ExtResource("5_torii")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -62)
+
+[node name="Torii4" parent="Gates" instance=ExtResource("5_torii")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -114)
+
+[node name="Garden" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -100)
+script = ExtResource("8_terrain")
+size = Vector2(160, 120)
+noise = SubResource("Noise_garden")
+areas = Array[ExtResource("9_area")]([SubResource("Area_south_flat"), SubResource("Area_west_flat"), SubResource("Area_east_flat"), SubResource("Area_path"), SubResource("Area_plateau"), SubResource("Area_ramp"), SubResource("Area_pond")])
+
+[node name="Pines" type="Node3D" parent="Garden"]
+script = ExtResource("10_scatter")
+scene = ExtResource("11_pine")
+count = 45
+random_seed = 3
+area = Rect2(-77, -157, 154, 111)
+avoid = Array[Rect2]([Rect2(-6, -160, 12, 122), Rect2(-16, -140, 32, 22), Rect2(41, -142, 16, 34), Rect2(-80, -48, 160, 8)])
+max_slope_deg = 22
+min_scale = 0.85
+max_scale = 1.35
+
+[node name="RoundTrees" type="Node3D" parent="Garden"]
+script = ExtResource("10_scatter")
+scene = ExtResource("12_round")
+count = 30
+random_seed = 5
+area = Rect2(-77, -157, 154, 111)
+avoid = Array[Rect2]([Rect2(-6, -160, 12, 122), Rect2(-16, -140, 32, 22), Rect2(41, -142, 16, 34), Rect2(-80, -48, 160, 8)])
+max_slope_deg = 22
+min_scale = 0.8
+max_scale = 1.2
+
+[node name="Bushes" type="Node3D" parent="Garden"]
+script = ExtResource("10_scatter")
+scene = ExtResource("13_bush")
+count = 70
+random_seed = 11
+area = Rect2(-77, -157, 154, 111)
+avoid = Array[Rect2]([Rect2(-6, -160, 12, 122), Rect2(-16, -140, 32, 22), Rect2(41, -142, 16, 34), Rect2(-80, -48, 160, 8)])
+max_slope_deg = 30
+min_scale = 0.7
+max_scale = 1.3
+
+[node name="Rocks" type="Node3D" parent="Garden"]
+script = ExtResource("10_scatter")
+scene = ExtResource("14_rock")
+count = 25
+random_seed = 17
+area = Rect2(-77, -157, 154, 111)
+avoid = Array[Rect2]([Rect2(-6, -160, 12, 122), Rect2(-16, -140, 32, 22), Rect2(41, -142, 16, 34), Rect2(-80, -48, 160, 8)])
+max_slope_deg = 35
+min_scale = 0.6
+max_scale = 1.6
+
+[node name="Grass" type="Node3D" parent="Garden"]
+script = ExtResource("10_scatter")
+mesh = ExtResource("15_grass")
+count = 3000
+random_seed = 23
+area = Rect2(-79, -159, 158, 118)
+avoid = Array[Rect2]([Rect2(-3, -160, 6, 120), Rect2(-16, -140, 32, 22)])
+max_slope_deg = 30.0
+min_scale = 0.7
+max_scale = 1.5
+
+[node name="Water" type="Node3D" parent="."]
+
+[node name="Stream" type="MeshInstance3D" parent="Water"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.05, -149.875)
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_stream")
+
+[node name="Waterfall" parent="Water" instance=ExtResource("17_waterfall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.05, -139.75)
+
+[node name="Pond" type="MeshInstance3D" parent="Water"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.35, -129)
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_pond")
+
+[node name="Hedges" type="Node3D" parent="."]
+
+[node name="Hedge1" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -80.8, 10, -156)
+
+[node name="Hedge2" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -80.8, 10, -148)
+
+[node name="Hedge3" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 3.85714, 0, -1, 0, 0, -80.8, 0, -140)
+
+[node name="Hedge4" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -80.8, 0, -132)
+
+[node name="Hedge5" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -80.8, 0, -124)
+
+[node name="Hedge6" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -80.8, 0, -116)
+
+[node name="Hedge7" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -80.8, 0, -108)
+
+[node name="Hedge8" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -80.8, 0, -100)
+
+[node name="Hedge9" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -80.8, 0, -92)
+
+[node name="Hedge10" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -80.8, 0, -84)
+
+[node name="Hedge11" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -80.8, 0, -76)
+
+[node name="Hedge12" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -80.8, 0, -68)
+
+[node name="Hedge13" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -80.8, 0, -60)
+
+[node name="Hedge14" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -80.8, 0, -52)
+
+[node name="Hedge15" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -80.8, 0, -44)
+
+[node name="Hedge16" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 80.8, 10, -156)
+
+[node name="Hedge17" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 80.8, 10, -148)
+
+[node name="Hedge18" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 3.85714, 0, -1, 0, 0, 80.8, 0, -140)
+
+[node name="Hedge19" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 80.8, 0, -132)
+
+[node name="Hedge20" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 80.8, 0, -124)
+
+[node name="Hedge21" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 80.8, 0, -116)
+
+[node name="Hedge22" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 80.8, 0, -108)
+
+[node name="Hedge23" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 80.8, 0, -100)
+
+[node name="Hedge24" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 80.8, 0, -92)
+
+[node name="Hedge25" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 80.8, 0, -84)
+
+[node name="Hedge26" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 80.8, 0, -76)
+
+[node name="Hedge27" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 80.8, 0, -68)
+
+[node name="Hedge28" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 80.8, 0, -60)
+
+[node name="Hedge29" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 80.8, 0, -52)
+
+[node name="Hedge30" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 80.8, 0, -44)
+
+[node name="Hedge31" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76, 10, -160.8)
+
+[node name="Hedge32" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -68, 10, -160.8)
+
+[node name="Hedge33" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, 10, -160.8)
+
+[node name="Hedge34" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52, 10, -160.8)
+
+[node name="Hedge35" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44, 10, -160.8)
+
+[node name="Hedge36" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36, 10, -160.8)
+
+[node name="Hedge37" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28, 10, -160.8)
+
+[node name="Hedge38" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 10, -160.8)
+
+[node name="Hedge39" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 10, -160.8)
+
+[node name="Hedge40" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 10, -160.8)
+
+[node name="Hedge41" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 10, -160.8)
+
+[node name="Hedge42" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 10, -160.8)
+
+[node name="Hedge43" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 10, -160.8)
+
+[node name="Hedge44" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 10, -160.8)
+
+[node name="Hedge45" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 10, -160.8)
+
+[node name="Hedge46" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 10, -160.8)
+
+[node name="Hedge47" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52, 10, -160.8)
+
+[node name="Hedge48" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 10, -160.8)
+
+[node name="Hedge49" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 68, 10, -160.8)
+
+[node name="Hedge50" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 76, 10, -160.8)
+
+[node name="Hedge51" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44, 0, -39.2)
+
+[node name="Hedge52" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52, 0, -39.2)
+
+[node name="Hedge53" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, 0, -39.2)
+
+[node name="Hedge54" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -68, 0, -39.2)
+
+[node name="Hedge55" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -76, 0, -39.2)
+
+[node name="Hedge56" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 0, -39.2)
+
+[node name="Hedge57" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52, 0, -39.2)
+
+[node name="Hedge58" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 0, -39.2)
+
+[node name="Hedge59" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 68, 0, -39.2)
+
+[node name="Hedge60" parent="Hedges" instance=ExtResource("16_hedge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 76, 0, -39.2)
+
+[node name="Bounds" type="StaticBody3D" parent="."]
+
+[node name="West" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81, 10, -100)
+shape = SubResource("BoxShape3D_side")
+
+[node name="East" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 81, 10, -100)
+shape = SubResource("BoxShape3D_side")
+
+[node name="North" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, -161)
+shape = SubResource("BoxShape3D_north")
+
+[node name="SouthWest" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, 10, -39)
+shape = SubResource("BoxShape3D_south")
+
+[node name="SouthEast" type="CollisionShape3D" parent="Bounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 10, -39)
+shape = SubResource("BoxShape3D_south")

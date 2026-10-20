@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/water.gdshader" id="1_water"]
+
+[resource]
+resource_name = "water_stream"
+shader = ExtResource("1_water")
+shader_parameter/water_color = Color(0.1, 0.48, 0.78, 0.85)
+shader_parameter/foam_color = Color(0.88, 0.96, 1, 1)
+shader_parameter/flow = Vector2(0, 0.35)
+shader_parameter/pattern_scale = Vector2(2, 8)
+shader_parameter/foam_amount = 0.3
+shader_parameter/pixelate = 32.0

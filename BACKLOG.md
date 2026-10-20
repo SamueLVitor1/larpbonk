@@ -32,6 +32,7 @@ Ao implementar uma, marcar no Roadmap do `CLAUDE.md` e apagar daqui.
 
 ## 🌊 Spawner e horda
 - **Ondas em grupos:** às vezes solta vários juntos (grupinho / círculo fechando em volta).
+- **Inimigos no relevo:** hoje sobem qualquer inclinação (até o penhasco do platô), porque só seguem a altura. Limitar a subida se ficar estranho.
 - **Inimigos desviando de obstáculos:** hoje atravessam pilares/lanternas do templo (andam sem física). Opções baratas: empurrar para fora de círculos conhecidos dos obstáculos, ou flow field no mapa.
 - **Inimigos se afastando uns dos outros:** hoje viram um "bolo"; separação simples por código (sem física). Repetir o teste de estresse depois.
 
@@ -47,6 +48,7 @@ Ao implementar uma, marcar no Roadmap do `CLAUDE.md` e apagar daqui.
 - **Nível máximo por upgrade** (ex.: "Força 3/5") e upgrades que exigem outro antes.
 
 ## 🗺️ Estrutura e meta
+- **Performance do jardim:** ~20% menos FPS que no templo com 500 porcos. Testar: sombras só nas árvores perto, menos lanternas com luz, `visibility_range` na vegetação.
 - **Seleção de mapa** (hoje a seleção de personagem abre sempre o templo).
 - **Mais mapas:** floresta, deserto… (cena herdada de `base_level` + `props/` próprios).
 - 🏆 **Recorde salvo** ("Seu melhor: 07:32").
