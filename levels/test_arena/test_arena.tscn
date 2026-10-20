@@ -10,6 +10,8 @@
 [ext_resource type="PackedScene" path="res://ui/menus/level_up_menu/level_up_menu.tscn" id="7_level_up_menu"]
 [ext_resource type="PackedScene" path="res://systems/upgrades/upgrade_manager.tscn" id="8_upgrade_manager"]
 [ext_resource type="PackedScene" path="res://ui/menus/game_over_menu/game_over_menu.tscn" id="9_game_over"]
+[ext_resource type="PackedScene" path="res://ui/damage_numbers/damage_number_spawner.tscn" id="10_damage_numbers"]
+[ext_resource type="PackedScene" path="res://effects/death_puff/death_puff_spawner.tscn" id="11_death_puff"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 
@@ -49,7 +51,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_1")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=1994294439]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0039691925, -1.1920929e-07, -0.002168417)
 mesh = SubResource("BoxMesh_1")
 
 [node name="Player" parent="." unique_id=510878747 instance=ExtResource("1_player")]
@@ -62,12 +63,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
 enemy_scene = ExtResource("2_enemy")
 config = ExtResource("4_spawn_config")
 
-[node name="DropSpawner" parent="." instance=ExtResource("5_drops")]
+[node name="DropSpawner" parent="." unique_id=1692472799 instance=ExtResource("5_drops")]
 
-[node name="Hud" parent="." instance=ExtResource("6_hud")]
+[node name="Hud" parent="." unique_id=1211981824 instance=ExtResource("6_hud")]
 
-[node name="UpgradeManager" parent="." instance=ExtResource("8_upgrade_manager")]
+[node name="UpgradeManager" parent="." unique_id=1061210737 instance=ExtResource("8_upgrade_manager")]
 
-[node name="LevelUpMenu" parent="." instance=ExtResource("7_level_up_menu")]
+[node name="LevelUpMenu" parent="." unique_id=1590276569 instance=ExtResource("7_level_up_menu")]
 
-[node name="GameOverMenu" parent="." instance=ExtResource("9_game_over")]
+[node name="GameOverMenu" parent="." unique_id=1057419491 instance=ExtResource("9_game_over")]
+
+[node name="DamageNumberSpawner" parent="." instance=ExtResource("10_damage_numbers")]
+
+[node name="DeathPuffSpawner" parent="." instance=ExtResource("11_death_puff")]

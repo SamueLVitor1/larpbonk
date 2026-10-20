@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://ui/damage_numbers/damage_number_spawner.gd" id="1_spawner"]
+[ext_resource type="PackedScene" path="res://ui/damage_numbers/damage_number.tscn" id="2_number"]
+
+[node name="DamageNumberSpawner" type="Node"]
+script = ExtResource("1_spawner")
+number_scene = ExtResource("2_number")

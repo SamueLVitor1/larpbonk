@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://effects/death_puff/death_puff_spawner.gd" id="1_spawner"]
+[ext_resource type="PackedScene" path="res://effects/death_puff/death_puff.tscn" id="2_puff"]
+
+[node name="DeathPuffSpawner" type="Node"]
+script = ExtResource("1_spawner")
+puff_scene = ExtResource("2_puff")

@@ -15,6 +15,7 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 | `systems/` | Lógica não-visual: `spawner/` (ondas), `pooling/` (reuso de objetos), `upgrades/` |
 | `components/` | Nós reutilizáveis por composição: `health_component/`, `hurtbox_component/` (recebe dano), `hitbox_component/` (causa dano) |
 | `data/` | Resources `.tres` com números do jogo (vida, dano, velocidade); sem código |
+| `effects/` | Efeitos visuais (partículas), ex.: `death_puff/` |
 | `levels/` | Mapas/arenas (`test_arena/` para protótipo) |
 | `ui/` | `hud/` e `menus/` |
 | `autoload/` | Singletons globais — manter o mínimo (`game_manager`, `event_bus`) |
@@ -97,24 +98,22 @@ Feito em passos pequenos, cada um testado no jogo antes do próximo (e um commit
   - [x] 7.4 Botão "Jogar de novo" (recarrega a cena). "Sair" fica para quando houver menu principal
   - [x] 7.5 `game_manager`: **não precisou** — o estado da partida vive nos sistemas e conversa pelo `EventBus`; recarregar a cena zera tudo
 
-**Próximo:** escolher itens do backlog abaixo (ex.: separação entre inimigos, mais inimigos, mais armas, menu principal).
+- [x] **8. Game feel**
+  - [x] 8.1 Inimigo pisca branco ao tomar dano (`material_overlay`)
+  - [x] 8.2 Números de dano subindo (`Label3D` com pool, `EventBus.enemy_damaged`)
+  - [x] 8.3 "Puf" de partículas ao morrer (`effects/death_puff/`, `GPUParticles3D` one-shot com pool)
+  - [x] 8.4 Câmera treme quando o player toma dano (`h_offset`/`v_offset` no `CameraRig`)
+
+**Depois:** escolher itens do [BACKLOG.md](BACKLOG.md) (ex.: separação entre inimigos, mais inimigos, mais armas, menu principal).
 
 ### Lembretes para continuar
 - Mudou `project.godot` (autoload, layers)? **Projeto → Recarregar Projeto Atual** no Godot.
 - Se o Godot perguntar para recarregar uma cena alterada fora dele, escolha **recarregar** (não salvar por cima).
 - Testes rápidos: **K** mata todos; overlay mostra FPS/inimigos; para estresse, Config do spawner → `stress_spawn.tres`.
 
-## Ideias futuras (backlog)
+## Ideias futuras
 
-- **Ondas em grupos:** spawner às vezes solta vários inimigos juntos (grupinho/círculo fechando), em vez de só um por vez.
-- **Inimigos se afastando uns dos outros:** hoje eles se sobrepõem num "bolo"; dá para adicionar uma separação simples por código (sem física).
-- **Mais tipos de inimigo:** novas cenas herdadas de `base_enemy` + `.tres` (ex.: porco grande lento com muita vida).
-- **Visual temático da bala:** trocar a esfera azul por algo do Gojo (Azul/Vermelho), com efeito de brilho. Se vier do Sketchfab: licença CC0/CC-BY (dar crédito) e low poly.
-- **Bala que atravessa (pierce):** upgrade clássico; `HitboxComponent` com contador de acertos em vez de `hit_once`.
-- **Cartas de upgrade bonitas:** hoje são botões padrão; ícone, cor por raridade, animação.
-- **Nível máximo por upgrade** (ex.: "Força 3/5") e upgrades que exigem outro antes.
-- **Cor da gema de XP** diferente dos inimigos verdes (ciano/roxo/amarelo) para destacar na horda.
-- **Exportar** para macOS (app não assinado → clique direito → Abrir) e Windows.
+Ficam no [BACKLOG.md](BACKLOG.md), organizadas por tema. Ao terminar uma, apagar de lá (o progresso fica no Roadmap acima).
 
 ## Fluxo de trabalho
 

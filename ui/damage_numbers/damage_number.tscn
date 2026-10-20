@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://ui/damage_numbers/damage_number.gd" id="1_number"]
+
+[node name="DamageNumber" type="Label3D"]
+pixel_size = 0.006
+billboard = 1
+no_depth_test = true
+fixed_size = false
+modulate = Color(1, 0.95, 0.6, 1)
+outline_modulate = Color(0, 0, 0, 1)
+text = "10"
+font_size = 64
+outline_size = 14
+script = ExtResource("1_number")

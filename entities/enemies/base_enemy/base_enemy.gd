@@ -7,9 +7,17 @@ extends Node3D
 @export var stats: EnemyStats
 ## Para de andar quando está mais perto que isso (evita tremer em cima do player).
 @export var stop_distance: float = 0.5
+## Quanto tempo o inimigo fica branco ao tomar dano (segundos).
+@export var hit_flash_duration: float = 0.08
+
+## Um material só, compartilhado por todos os inimigos: piscar é só ligar/desligar
+## o overlay em cada malha, sem criar nada novo a cada acerto.
+static var _flash_material: StandardMaterial3D
 
 var target: Node3D
 var _move_speed: float = 3.0
+var _meshes: Array[MeshInstance3D] = []
+var _flash_time_left: float = 0.0
 
 @onready var health: HealthComponent = $HealthComponent
 @onready var hitbox: HitboxComponent = $HitboxComponent
@@ -18,6 +26,10 @@ var _move_speed: float = 3.0
 func _ready() -> void:
 	_apply_stats()
 	health.died.connect(_on_died)
+	health.damaged.connect(_on_damaged)
+	# Busca as malhas uma vez só (o modelo do .glb pode ter várias).
+	for node in $Model.find_children("*", "MeshInstance3D", true, false):
+		_meshes.append(node)
 	# Vindo de um pool, só entra no grupo ao sair da reserva (on_pool_acquire);
 	# senão os guardados contariam no limite do spawner e na tecla K.
 	if not has_meta(&"object_pool"):
@@ -33,11 +45,17 @@ func on_pool_acquire() -> void:
 ## Voltou para a reserva: deixa de contar como inimigo.
 func on_pool_release() -> void:
 	remove_from_group("enemies")
+	_set_flash(false)
 
 
 ## Anda reto até o player, só no plano XZ, e vira o corpo para ele.
 ## O modelo olha para +Z, por isso atan2(x, z).
 func _physics_process(delta: float) -> void:
+	# Contador simples em vez de Tween/Timer: com centenas de inimigos é mais barato.
+	if _flash_time_left > 0.0:
+		_flash_time_left -= delta
+		if _flash_time_left <= 0.0:
+			_set_flash(false)
 	if target == null:
 		# Busca "preguiçosa": não depende da ordem em que player e inimigo entram na cena.
 		target = get_tree().get_first_node_in_group("player") as Node3D
@@ -62,6 +80,22 @@ func _apply_stats() -> void:
 	health.reset()
 	hitbox.damage = stats.contact_damage
 	_move_speed = stats.move_speed
+
+
+func _on_damaged(amount: float) -> void:
+	_flash_time_left = hit_flash_duration
+	_set_flash(true)
+	EventBus.enemy_damaged.emit(global_position + Vector3.UP * 1.0, amount)
+
+
+func _set_flash(on: bool) -> void:
+	if _flash_material == null:
+		_flash_material = StandardMaterial3D.new()
+		_flash_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		_flash_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		_flash_material.albedo_color = Color(1, 1, 1, 0.85)
+	for mesh in _meshes:
+		mesh.material_overlay = _flash_material if on else null
 
 
 func _on_died() -> void:

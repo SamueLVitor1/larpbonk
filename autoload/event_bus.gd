@@ -38,3 +38,7 @@ signal run_time_changed(seconds: int)
 ## A vida do player chegou a zero.
 @warning_ignore("unused_signal")
 signal player_died
+
+## Um inimigo em `position` tomou `amount` de dano (números de dano, sons...).
+@warning_ignore("unused_signal")
+signal enemy_damaged(position: Vector3, amount: float)
