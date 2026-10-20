@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" path="res://assets/textures/ui/landscape_4_field.png" id="6_campo"]
 [ext_resource type="Texture2D" path="res://assets/textures/ui/logo.png" id="7_logo"]
 [ext_resource type="Texture2D" path="res://assets/textures/ui/cursor.png" id="8_cursor"]
+[ext_resource type="Script" path="res://ui/theme/menu_cursor.gd" id="9_cursor_script"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -144,7 +145,7 @@ focus_next = NodePath("../PlayButton")
 focus_previous = NodePath("../PlayButton")
 text = "SAIR"
 
-[node name="Cursor" type="TextureRect" parent="."]
+[node name="Cursor" type="TextureRect" parent="." node_paths=PackedStringArray("menu")]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 0
@@ -152,6 +153,8 @@ offset_right = 35.0
 offset_bottom = 35.0
 mouse_filter = 2
 texture = ExtResource("8_cursor")
+script = ExtResource("9_cursor_script")
+menu = NodePath("../Menu")
 
 [node name="VersionLabel" type="Label" parent="."]
 layout_mode = 1

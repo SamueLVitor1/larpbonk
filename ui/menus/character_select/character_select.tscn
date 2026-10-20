@@ -3,14 +3,13 @@
 [ext_resource type="Script" path="res://ui/menus/character_select/character_select.gd" id="1_select"]
 [ext_resource type="Script" path="res://entities/player/character_data.gd" id="2_character_data"]
 [ext_resource type="Resource" path="res://data/characters/gojo.tres" id="3_gojo"]
-
-[sub_resource type="Gradient" id="Gradient_bg"]
-colors = PackedColorArray(0.16, 0.32, 0.2, 1, 0.05, 0.08, 0.12, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_bg"]
-gradient = SubResource("Gradient_bg")
-fill_from = Vector2(0.5, 0)
-fill_to = Vector2(0.5, 1)
+[ext_resource type="Theme" path="res://ui/theme/larpbonk_theme.tres" id="4_theme"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/landscape_1_horizon.png" id="5_horizon"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/landscape_2_far_mountains.png" id="6_far"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/landscape_3_near_mountains.png" id="7_near"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/landscape_4_field.png" id="8_field"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/cursor.png" id="9_cursor"]
+[ext_resource type="Script" path="res://ui/theme/menu_cursor.gd" id="10_cursor_script"]
 
 [sub_resource type="Environment" id="Environment_preview"]
 ambient_light_source = 2
@@ -27,18 +26,80 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("4_theme")
 script = ExtResource("1_select")
 characters = Array[ExtResource("2_character_data")]([ExtResource("3_gojo")])
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("GradientTexture2D_bg")
-expand_mode = 1
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Landscape" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Horizon" type="TextureRect" parent="Landscape"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -390.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("5_horizon")
+
+[node name="FarMountains" type="TextureRect" parent="Landscape"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -390.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("6_far")
+
+[node name="NearMountains" type="TextureRect" parent="Landscape"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -390.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("7_near")
+
+[node name="Field" type="TextureRect" parent="Landscape"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -390.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("8_field")
 
 [node name="Margin" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -63,10 +124,9 @@ theme_override_constants/separation = 40
 
 [node name="Title" type="Label" parent="Margin/Columns/Left"]
 layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 17
-theme_override_font_sizes/font_size = 67
-text = "Escolha seu personagem"
+theme_type_variation = &"MenuTitle"
+theme_override_font_sizes/font_size = 32
+text = "ESCOLHA SEU PERSONAGEM"
 
 [node name="Slots" type="GridContainer" parent="Margin/Columns/Left"]
 unique_name_in_owner = true
@@ -81,11 +141,9 @@ size_flags_vertical = 3
 
 [node name="BackButton" type="Button" parent="Margin/Columns/Left"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(333, 93)
 layout_mode = 2
 size_flags_horizontal = 0
-theme_override_font_sizes/font_size = 40
-text = "Voltar"
+text = "VOLTAR"
 
 [node name="Right" type="VBoxContainer" parent="Margin/Columns"]
 layout_mode = 2
@@ -118,24 +176,27 @@ unique_name_in_owner = true
 [node name="NameLabel" type="Label" parent="Margin/Columns/Right"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.55, 1, 0.5, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 17
-theme_override_font_sizes/font_size = 73
-text = "Nome"
+theme_type_variation = &"MenuTitle"
+text = "NOME"
 
 [node name="DescriptionLabel" type="Label" parent="Margin/Columns/Right"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
-theme_override_font_sizes/font_size = 37
+theme_type_variation = &"MenuText"
 text = "Descrição"
 autowrap_mode = 3
 
 [node name="StartButton" type="Button" parent="Margin/Columns/Right"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(400, 100)
 layout_mode = 2
 size_flags_horizontal = 8
-theme_override_font_sizes/font_size = 47
-text = "Começar"
+text = "COMEÇAR"
+
+[node name="Cursor" type="TextureRect" parent="." node_paths=PackedStringArray("menu")]
+texture_filter = 1
+layout_mode = 0
+mouse_filter = 2
+texture = ExtResource("9_cursor")
+script = ExtResource("10_cursor_script")
+menu = NodePath("../Margin")

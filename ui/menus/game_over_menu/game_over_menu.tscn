@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://ui/menus/game_over_menu/game_over_menu.gd" id="1_menu"]
+[ext_resource type="Theme" path="res://ui/theme/larpbonk_theme.tres" id="2_theme"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/cursor.png" id="3_cursor"]
+[ext_resource type="Script" path="res://ui/theme/menu_cursor.gd" id="4_cursor_script"]
 
 [node name="GameOverMenu" type="CanvasLayer"]
 process_mode = 3
@@ -13,7 +16,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.15, 0, 0, 0.75)
+color = Color(0.0901961, 0.0392157, 0.164706, 0.9)
 
 [node name="Center" type="CenterContainer" parent="."]
 anchors_preset = 15
@@ -21,54 +24,56 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_theme")
 
 [node name="VBox" type="VBoxContainer" parent="Center"]
 layout_mode = 2
-theme_override_constants/separation = 30
+theme_override_constants/separation = 32
 
 [node name="Title" type="Label" parent="Center/VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.35, 0.35, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 17
-theme_override_font_sizes/font_size = 93
+theme_type_variation = &"MenuTitle"
+theme_override_colors/font_color = Color(0.878431, 0.25098, 0.541176, 1)
+theme_override_font_sizes/font_size = 80
 text = "VOCÊ MORREU"
 horizontal_alignment = 1
 
 [node name="TimeLabel" type="Label" parent="Center/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 43
-text = "Tempo sobrevivido: 00:00"
+theme_type_variation = &"MenuText"
+theme_override_font_sizes/font_size = 32
+text = "TEMPO   00:00"
 horizontal_alignment = 1
 
 [node name="LevelLabel" type="Label" parent="Center/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 43
-text = "Nível: 1"
+theme_type_variation = &"MenuText"
+theme_override_font_sizes/font_size = 32
+text = "NÍVEL   1"
 horizontal_alignment = 1
 
 [node name="Spacer" type="Control" parent="Center/VBox"]
-custom_minimum_size = Vector2(0, 20)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
 [node name="RestartButton" type="Button" parent="Center/VBox"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(433, 93)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 40
-text = "Jogar de novo"
+text = "JOGAR DE NOVO"
 
 [node name="MainMenuButton" type="Button" parent="Center/VBox"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(433, 93)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 40
-text = "Menu principal"
+text = "MENU PRINCIPAL"
+
+[node name="Cursor" type="TextureRect" parent="Center" node_paths=PackedStringArray("menu")]
+texture_filter = 1
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("3_cursor")
+script = ExtResource("4_cursor_script")
+menu = NodePath("../VBox")

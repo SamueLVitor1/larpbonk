@@ -33,8 +33,8 @@ func _on_player_xp_changed(_current: float, _needed: float, level: int) -> void:
 
 
 func _on_player_died() -> void:
-	time_label.text = "Tempo sobrevivido: %02d:%02d" % [floori(_seconds / 60.0), _seconds % 60]
-	level_label.text = "Nível: %d" % _level
+	time_label.text = "TEMPO   %02d:%02d" % [floori(_seconds / 60.0), _seconds % 60]
+	level_label.text = "NÍVEL   %d" % _level
 	show()
 	get_tree().paused = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
@@ -45,8 +45,8 @@ func _on_player_died() -> void:
 ## sem precisar resetar cada sistema na mão. O EventBus (autoload) sobrevive,
 ## mas as conexões dos nós antigos somem junto com eles.
 func _on_restart_pressed() -> void:
-	get_tree().paused = false
-	get_tree().reload_current_scene()
+	# O SceneLoader mantém a cena antiga pausada atrás da tela de carregamento.
+	SceneLoader.reload()
 
 
 func _on_main_menu_pressed() -> void:

@@ -57,6 +57,7 @@ func _build_slots() -> void:
 ## Quadradinho estilo Megabonk: retrato em cima, nome embaixo.
 func _make_slot(label: String, portrait: Control) -> Button:
 	var slot := Button.new()
+	slot.theme_type_variation = &"CharacterSlot"  # caixa com borda (larpbonk_theme)
 	slot.custom_minimum_size = slot_size
 	var box := VBoxContainer.new()
 	box.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 6)
@@ -67,16 +68,16 @@ func _make_slot(label: String, portrait: Control) -> Button:
 		placeholder.text = "?"
 		placeholder.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		placeholder.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		placeholder.add_theme_font_size_override("font_size", 80)
+		placeholder.add_theme_font_size_override("font_size", 64)
 		placeholder.modulate = Color(1, 1, 1, 0.35)
 		portrait = placeholder
 	portrait.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	box.add_child(portrait)
 	var name_label := Label.new()
-	name_label.text = label
+	name_label.text = label.to_upper()
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.add_theme_font_size_override("font_size", 30)
+	name_label.add_theme_font_size_override("font_size", 16)
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	box.add_child(name_label)
 	return slot
@@ -139,7 +140,7 @@ func _instantiate_model(character: CharacterData) -> Node3D:
 
 func _select(character: CharacterData) -> void:
 	_selected = character
-	name_label.text = character.display_name
+	name_label.text = character.display_name.to_upper()
 	description_label.text = character.description
 	_show_model(character)
 
@@ -155,7 +156,7 @@ func _show_model(character: CharacterData) -> void:
 
 func _on_start_pressed() -> void:
 	GameManager.selected_character = _selected
-	get_tree().change_scene_to_file(game_scene)
+	SceneLoader.change_scene(game_scene)
 
 
 func _on_back_pressed() -> void:

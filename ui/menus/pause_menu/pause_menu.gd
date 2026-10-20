@@ -44,8 +44,8 @@ func _resume() -> void:
 
 
 func _on_restart_pressed() -> void:
-	get_tree().paused = false
-	get_tree().reload_current_scene()
+	# O SceneLoader mantém a cena antiga pausada atrás da tela de carregamento.
+	SceneLoader.reload()
 
 
 func _on_main_menu_pressed() -> void:

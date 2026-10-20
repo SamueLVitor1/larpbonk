@@ -4,6 +4,54 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vazio"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot"]
+bg_color = Color(0.0901961, 0.0392157, 0.164706, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.368627, 0.329412, 0.439216, 1)
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot_hover"]
+bg_color = Color(0.0901961, 0.0392157, 0.164706, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 0.823529, 0.247059, 1)
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot_pressed"]
+bg_color = Color(0.227451, 0.0509804, 0.360784, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 0.54902, 0.752941, 1)
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot_disabled"]
+bg_color = Color(0.05, 0.02, 0.09, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.2, 0.17, 0.25, 1)
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+
 [resource]
 default_font = ExtResource("1_fonte")
 default_font_size = 16
@@ -26,3 +74,21 @@ Label/font_sizes/font_size = 16
 VersionLabel/base_type = &"Label"
 VersionLabel/colors/font_color = Color(0.368627, 0.329412, 0.439216, 1)
 VersionLabel/font_sizes/font_size = 16
+CharacterSlot/base_type = &"Button"
+CharacterSlot/colors/font_color = Color(1, 1, 1, 1)
+CharacterSlot/styles/normal = SubResource("StyleBoxFlat_slot")
+CharacterSlot/styles/hover = SubResource("StyleBoxFlat_slot_hover")
+CharacterSlot/styles/focus = SubResource("StyleBoxFlat_slot_hover")
+CharacterSlot/styles/pressed = SubResource("StyleBoxFlat_slot_pressed")
+CharacterSlot/styles/hover_pressed = SubResource("StyleBoxFlat_slot_pressed")
+CharacterSlot/styles/disabled = SubResource("StyleBoxFlat_slot_disabled")
+MenuTitle/base_type = &"Label"
+MenuTitle/colors/font_color = Color(1, 0.54902, 0.752941, 1)
+MenuTitle/colors/font_shadow_color = Color(0.227451, 0.0509804, 0.360784, 1)
+MenuTitle/constants/shadow_offset_x = 6
+MenuTitle/constants/shadow_offset_y = 6
+MenuTitle/font_sizes/font_size = 64
+MenuText/base_type = &"Label"
+MenuText/colors/font_color = Color(1, 1, 1, 1)
+MenuText/constants/line_spacing = 12
+MenuText/font_sizes/font_size = 24

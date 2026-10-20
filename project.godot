@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 EventBus="*res://autoload/event_bus.gd"
 GameManager="*res://autoload/game_manager.gd"
+SceneLoader="*res://autoload/scene_loader.gd"
 
 [display]
 
@@ -28,6 +29,10 @@ window/size/window_width_override=1280
 window/size/window_height_override=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+
+[gui]
+
+theme/default_theme_scale=1.667
 
 [input]
 
@@ -78,7 +83,3 @@ lock_on={
 
 textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
-
-[gui]
-
-theme/default_theme_scale=1.667

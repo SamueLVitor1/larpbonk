@@ -18,7 +18,7 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 | `effects/` | Efeitos visuais (partículas), ex.: `death_puff/` |
 | `levels/` | Mapas: `base_level/` (sistemas comuns) + um subdiretório por mapa com `props/` e `materials/` próprios (`temple/`; `test_arena/` para protótipo/estresse) |
 | `ui/` | `hud/`, `menus/` e `theme/` (`larpbonk_theme.tres` + `palette.gd` com as cores) |
-| `autoload/` | Singletons globais — manter o mínimo: `EventBus` (sinais) e `GameManager` (estado entre cenas) |
+| `autoload/` | Singletons globais — manter o mínimo: `EventBus` (sinais), `GameManager` (estado entre cenas) e `SceneLoader` (troca de cena com tela de carregamento) |
 
 ## Convenções
 
@@ -32,9 +32,10 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - Cada mapa é uma **cena herdada** de `levels/base_level/base_level.tscn` (player, spawners, HUD, menus, debug) e só acrescenta o cenário (`WorldEnvironment`, luz, chão, obstáculos). Sistema novo comum a todos os mapas entra na base. Mapa fechado define `spawn_areas` (lista de `Rect2` X/Z; vale estar em qualquer uma) no `EnemySpawner` herdado; lista vazia = sem limite.
 - Modelos `.glb`: uma malha só, transforms aplicados, origem embaixo no centro (onde "pisa").
 - Comunicação entre sistemas desacoplados via sinais do `event_bus`.
+- **Entrar num mapa → `SceneLoader.change_scene(path)` / `SceneLoader.reload()`**, nunca `change_scene_to_file` direto: carrega em outra thread e esconde a montagem do mapa (relevo, scatter, pools, shaders) atrás do "CARREGANDO...". Menus leves podem trocar direto.
 - `.gitkeep` mantém pastas vazias no Git; pode remover quando a pasta tiver arquivos.
 - `.godot/` é cache local e fica fora do Git.
-- **UI:** resolução base 1920×1080 (stretch `canvas_items`, janela abre em 1280×720); tamanhos de UI pensados nessa escala. Estilo NES: fonte Press Start 2P (`assets/fonts/`, importada sem antialiasing, tamanhos múltiplos de 8), cores em `Palette`, item de menu sem caixa (destaque = amarelo + cursor ►). Texturas pixel art com filtro Nearest (padrão do projeto).
+- **UI:** resolução base 1920×1080 (stretch `canvas_items`, janela abre em 1280×720); tamanhos de UI pensados nessa escala. Estilo NES: fonte Press Start 2P (`assets/fonts/`, importada sem antialiasing, tamanhos múltiplos de 8), cores em `Palette`, item de menu sem caixa (destaque = amarelo + cursor ►, via componente `MenuCursor` em `ui/theme/`: aponte `menu` para o nó dos botões). Variações do Theme: `MenuTitle`, `MenuText`, `CharacterSlot`, `VersionLabel`. Texturas pixel art com filtro Nearest (padrão do projeto).
 
 ## Padrões do código
 
@@ -133,6 +134,8 @@ Feito em passos pequenos, cada um testado no jogo antes do próximo (e um commit
   - [x] 13.1 Menu principal novo (logo LARPBONK, cursor ► piscando, paisagem pixel art), feito no Claude Design
   - [x] 13.2 `ui/theme/larpbonk_theme.tres` + `Palette`; aplicado **só** no menu principal por enquanto
   - [x] 13.3 Resolução base 1920×1080; HUD e menus antigos reescalados (×1,667)
+  - [x] 13.4 Tela de carregamento (`SceneLoader` + `ui/loading_screen/`): tira a travadinha ao entrar no mapa, recomeçar e jogar de novo
+  - [x] 13.5 Pausa, game over e seleção de personagem no estilo NES (`MenuCursor` reutilizável)
 
 **Depois:** escolher itens do [BACKLOG.md](BACKLOG.md) (ex.: separação entre inimigos, mais inimigos, mais armas, menu principal).
 

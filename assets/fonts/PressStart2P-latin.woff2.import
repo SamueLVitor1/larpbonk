@@ -2,10 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
+uid="uid://b6mj7pdcuad5q"
+path="res://.godot/imported/PressStart2P-latin.woff2-1a43af15a607073d1fb1d5391b35307e.fontdata"
 
 [deps]
 
 source_file="res://assets/fonts/PressStart2P-latin.woff2"
+dest_files=["res://.godot/imported/PressStart2P-latin.woff2-1a43af15a607073d1fb1d5391b35307e.fontdata"]
 
 [params]
 

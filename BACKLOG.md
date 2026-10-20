@@ -45,7 +45,7 @@ Ao implementar uma, marcar no Roadmap do `CLAUDE.md` e apagar daqui.
 - **Cor da gema** diferente do verde dos porcos (ciano/roxo/amarelo) para destacar na horda.
 
 ## 🖥️ UI
-- **Levar o estilo NES às outras telas** (pausa, game over, level up, seleção, HUD): aplicar `larpbonk_theme.tres` tela por tela; depois ligar como Theme global.
+- **Levar o estilo NES ao resto** (cartas de level up e HUD); depois ligar `larpbonk_theme.tres` como Theme global.
 - **Opções** no menu principal (volume, tela cheia); o botão já existe desabilitado.
 - **Parallax** nas 4 camadas da paisagem do menu.
 
