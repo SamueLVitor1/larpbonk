@@ -56,6 +56,8 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - **Inimigos se afastando uns dos outros:** hoje eles se sobrepõem num "bolo"; dá para adicionar uma separação simples por código (sem física).
 - **Mais tipos de inimigo:** novas cenas herdadas de `base_enemy` + `.tres` (ex.: porco grande lento com muita vida).
 - **Visual temático da bala:** trocar a esfera azul por algo do Gojo (Azul/Vermelho), com efeito de brilho. Se vier do Sketchfab: licença CC0/CC-BY (dar crédito) e low poly.
+- **Bala que atravessa (pierce):** upgrade clássico; `HitboxComponent` com contador de acertos em vez de `hit_once`.
+- **Aquecer shaders:** a 1ª bala dá uma travadinha (compilação de shader); desenhar uma escondida no carregamento.
 - **Exportar** para macOS (app não assinado → clique direito → Abrir) e Windows.
 
 ## Fluxo de trabalho

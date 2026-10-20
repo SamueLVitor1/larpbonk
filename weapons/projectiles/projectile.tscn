@@ -1,6 +1,11 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://weapons/projectiles/projectile.gd" id="1_projectile"]
+
+[ext_resource type="PackedScene" path="res://components/hitbox_component/hitbox_component.tscn" id="2_hitbox"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_1"]
+radius = 0.25
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_blue"]
 shading_mode = 0
@@ -22,3 +27,12 @@ script = ExtResource("1_projectile")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 cast_shadow = 0
 mesh = SubResource("SphereMesh_1")
+
+[node name="HitboxComponent" parent="." instance=ExtResource("2_hitbox")]
+collision_layer = 0
+collision_mask = 16
+damage = 10.0
+hit_once = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HitboxComponent"]
+shape = SubResource("SphereShape3D_1")

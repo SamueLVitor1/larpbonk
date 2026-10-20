@@ -8,6 +8,10 @@ extends Area3D
 signal hit(hurtbox: HurtboxComponent)
 
 @export var damage: float = 10.0
+## Para depois do primeiro acerto (ex.: bala). Chame reset() para reutilizar.
+@export var hit_once: bool = false
+
+var _spent := false
 
 
 func _ready() -> void:
@@ -16,7 +20,17 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
+	if _spent:
+		return
 	for area in get_overlapping_areas():
 		if area is HurtboxComponent:
 			area.receive_hit(damage)
 			hit.emit(area)
+			if hit_once:
+				_spent = true
+				return
+
+
+## Libera para acertar de novo (objetos reaproveitados pelo pool).
+func reset() -> void:
+	_spent = false
