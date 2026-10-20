@@ -2,6 +2,8 @@ extends Node3D
 ## Arena de protótipo. Também guarda atalhos de debug, que só funcionam
 ## rodando pelo editor (somem num jogo exportado).
 
+const PROJECTILE_SCENE := preload("res://weapons/projectiles/projectile.tscn")
+
 var _debug_label: Label
 
 
@@ -35,6 +37,21 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_K:
 		_kill_all_enemies()
+	elif event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_B:
+		_fire_test_projectile()
+
+
+## Atira uma bala para onde a câmera está olhando (teste do passo 5.1).
+func _fire_test_projectile() -> void:
+	var player := get_tree().get_first_node_in_group("player") as Node3D
+	var camera := get_viewport().get_camera_3d()
+	if player == null or camera == null:
+		return
+	var forward := -camera.global_basis.z
+	forward.y = 0.0
+	var projectile := PROJECTILE_SCENE.instantiate() as Projectile
+	add_child(projectile)
+	projectile.launch(player.global_position + Vector3.UP, forward)
 
 
 ## Mata pelo HealthComponent (em vez de apagar direto), para testar o mesmo

@@ -55,6 +55,7 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - **Ondas em grupos:** spawner às vezes solta vários inimigos juntos (grupinho/círculo fechando), em vez de só um por vez.
 - **Inimigos se afastando uns dos outros:** hoje eles se sobrepõem num "bolo"; dá para adicionar uma separação simples por código (sem física).
 - **Mais tipos de inimigo:** novas cenas herdadas de `base_enemy` + `.tres` (ex.: porco grande lento com muita vida).
+- **Visual temático da bala:** trocar a esfera azul por algo do Gojo (Azul/Vermelho), com efeito de brilho. Se vier do Sketchfab: licença CC0/CC-BY (dar crédito) e low poly.
 - **Exportar** para macOS (app não assinado → clique direito → Abrir) e Windows.
 
 ## Fluxo de trabalho
