@@ -16,7 +16,7 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 | `components/` | Nós reutilizáveis por composição: `health_component/`, `hurtbox_component/` (recebe dano), `hitbox_component/` (causa dano) |
 | `data/` | Resources `.tres` com números do jogo (vida, dano, velocidade); sem código |
 | `effects/` | Efeitos visuais (partículas), ex.: `death_puff/` |
-| `levels/` | Mapas/arenas (`test_arena/` para protótipo) |
+| `levels/` | Mapas: `base_level/` (sistemas comuns) + um subdiretório por mapa (`test_arena/` para protótipo) |
 | `ui/` | `hud/` e `menus/` |
 | `autoload/` | Singletons globais — manter o mínimo: `EventBus` (sinais) e `GameManager` (estado entre cenas) |
 
@@ -29,6 +29,7 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - Preferir composição (componentes) a hierarquias de herança profundas.
 - Status/balanceamento ficam em `data/` (Resources `.tres`), não hardcoded em scripts. O script que define o Resource fica junto da entidade (ex.: `base_enemy/enemy_stats.gd` → `data/enemies/pig.tres`).
 - Cada inimigo é uma **cena herdada** de `base_enemy.tscn` (base + modelo em `Model` + seu `.tres`), ex.: `enemies/pig/pig.tscn`. Não pendurar nós dentro de cenas instanciadas direto no level: o Godot descarta ao salvar.
+- Cada mapa é uma **cena herdada** de `levels/base_level/base_level.tscn` (player, spawners, HUD, menus, debug) e só acrescenta o cenário (`WorldEnvironment`, luz, chão, obstáculos). Sistema novo comum a todos os mapas entra na base.
 - Modelos `.glb`: uma malha só, transforms aplicados, origem embaixo no centro (onde "pisa").
 - Comunicação entre sistemas desacoplados via sinais do `event_bus`.
 - `.gitkeep` mantém pastas vazias no Git; pode remover quando a pasta tiver arquivos.
@@ -41,7 +42,7 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - O pool é `Node` (não `Node3D`) de propósito: os filhos não herdam a posição de quem está acima (balas não andam junto com o player).
 - **Morte/sumir durante colisão → `call_deferred`:** desligar áreas no meio da checagem de colisão dá erro no Godot.
 - **`HitboxComponent.hit_once`:** ligado = um acerto e para (bala, `reset()` ao reutilizar); desligado = dano contínuo (contato do inimigo, limitado pela invulnerabilidade do alvo).
-- **Debug** (só no editor, em `test_arena.gd`): tecla **K** mata todos os inimigos; overlay com FPS e nº de inimigos. Para estresse, trocar o Config do spawner por `data/spawner/stress_spawn.tres`.
+- **Debug** (só no editor, em `base_level.gd`, vale para todo mapa): tecla **K** mata todos os inimigos; overlay com FPS e nº de inimigos. Para estresse, trocar o Config do spawner por `data/spawner/stress_spawn.tres`.
 
 ## Camadas de colisão (3D)
 
@@ -112,6 +113,10 @@ Feito em passos pequenos, cada um testado no jogo antes do próximo (e um commit
   - [x] 10.1 `CharacterData` (`entities/player/character_data.gd`) + `data/characters/gojo.tres`
   - [x] 10.2 Tela `ui/menus/character_select/`: quadradinhos (+2 com cadeado) e vitrine 3D girando com nome/descrição
   - [x] 10.3 `GameManager` (autoload) guarda `selected_character`. **O player ainda não lê** (só existe o Gojo); ao criar o 2º personagem, o player deve trocar modelo/arma a partir dele
+
+- [ ] **11. Mapas**
+  - [x] 11.1 `BaseLevel` (`levels/base_level/`) com os sistemas comuns; `test_arena` vira cena herdada só com o cenário
+  - [ ] 11.2 Primeiro mapa de verdade
 
 **Depois:** escolher itens do [BACKLOG.md](BACKLOG.md) (ex.: separação entre inimigos, mais inimigos, mais armas, menu principal).
 

@@ -1,6 +1,9 @@
+class_name BaseLevel
 extends Node3D
-## Arena de protótipo. Também guarda atalhos de debug, que só funcionam
-## rodando pelo editor (somem num jogo exportado).
+## Base de todo mapa: player, spawners, HUD e menus. Cada mapa é uma cena
+## herdada desta e só acrescenta o cenário (luz, céu, chão, obstáculos).
+## Também guarda atalhos de debug, que só funcionam rodando pelo editor
+## (somem num jogo exportado).
 
 var _debug_label: Label
 

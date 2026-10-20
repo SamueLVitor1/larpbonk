@@ -1,18 +1,7 @@
 [gd_scene format=3 uid="uid://dn27dwrh2nh1x"]
 
-[ext_resource type="Script" uid="uid://cywkj5w2j514t" path="res://levels/test_arena/test_arena.gd" id="0_arena"]
-[ext_resource type="PackedScene" path="res://entities/player/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" path="res://levels/base_level/base_level.tscn" id="1_base"]
 [ext_resource type="PackedScene" path="res://entities/enemies/pig/pig.tscn" id="2_enemy"]
-[ext_resource type="PackedScene" path="res://systems/spawner/enemy_spawner.tscn" id="3_spawner"]
-[ext_resource type="Resource" path="res://data/spawner/default_spawn.tres" id="4_spawn_config"]
-[ext_resource type="PackedScene" path="res://systems/drops/drop_spawner.tscn" id="5_drops"]
-[ext_resource type="PackedScene" path="res://ui/hud/hud.tscn" id="6_hud"]
-[ext_resource type="PackedScene" path="res://ui/menus/level_up_menu/level_up_menu.tscn" id="7_level_up_menu"]
-[ext_resource type="PackedScene" path="res://systems/upgrades/upgrade_manager.tscn" id="8_upgrade_manager"]
-[ext_resource type="PackedScene" path="res://ui/menus/game_over_menu/game_over_menu.tscn" id="9_game_over"]
-[ext_resource type="PackedScene" path="res://ui/damage_numbers/damage_number_spawner.tscn" id="10_damage_numbers"]
-[ext_resource type="PackedScene" path="res://effects/death_puff/death_puff_spawner.tscn" id="11_death_puff"]
-[ext_resource type="PackedScene" path="res://ui/menus/pause_menu/pause_menu.tscn" id="12_pause_menu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 
@@ -35,47 +24,23 @@ albedo_color = Color(0.36, 0.5, 0.32, 1)
 material = SubResource("StandardMaterial3D_1")
 size = Vector3(100, 1, 100)
 
-[node name="TestArena" type="Node3D" unique_id=1492830493]
-script = ExtResource("0_arena")
+[node name="TestArena" instance=ExtResource("1_base")]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1708527372]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_1")
 
-[node name="Sun" type="DirectionalLight3D" parent="." unique_id=265243567]
+[node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866, -0.354, 0.354, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 10, 0)
 shadow_enabled = true
 
-[node name="Floor" type="StaticBody3D" parent="." unique_id=2113323246]
+[node name="Floor" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=1724515981]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
 shape = SubResource("BoxShape3D_1")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=1994294439]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
 mesh = SubResource("BoxMesh_1")
 
-[node name="Player" parent="." unique_id=510878747 instance=ExtResource("1_player")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
-
-[node name="Pig" parent="." unique_id=1067142729 instance=ExtResource("2_enemy")]
+[node name="Pig" parent="." instance=ExtResource("2_enemy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
-
-[node name="EnemySpawner" parent="." unique_id=1921195872 instance=ExtResource("3_spawner")]
-enemy_scene = ExtResource("2_enemy")
-config = ExtResource("4_spawn_config")
-
-[node name="DropSpawner" parent="." unique_id=1692472799 instance=ExtResource("5_drops")]
-
-[node name="Hud" parent="." unique_id=1211981824 instance=ExtResource("6_hud")]
-
-[node name="UpgradeManager" parent="." unique_id=1061210737 instance=ExtResource("8_upgrade_manager")]
-
-[node name="LevelUpMenu" parent="." unique_id=1590276569 instance=ExtResource("7_level_up_menu")]
-
-[node name="GameOverMenu" parent="." unique_id=1057419491 instance=ExtResource("9_game_over")]
-
-[node name="DamageNumberSpawner" parent="." instance=ExtResource("10_damage_numbers")]
-
-[node name="DeathPuffSpawner" parent="." instance=ExtResource("11_death_puff")]
-
-[node name="PauseMenu" parent="." instance=ExtResource("12_pause_menu")]

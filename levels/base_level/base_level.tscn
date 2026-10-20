@@ -1,0 +1,41 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://levels/base_level/base_level.gd" id="0_level"]
+[ext_resource type="PackedScene" path="res://entities/player/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" path="res://entities/enemies/pig/pig.tscn" id="2_enemy"]
+[ext_resource type="PackedScene" path="res://systems/spawner/enemy_spawner.tscn" id="3_spawner"]
+[ext_resource type="Resource" path="res://data/spawner/default_spawn.tres" id="4_spawn_config"]
+[ext_resource type="PackedScene" path="res://systems/drops/drop_spawner.tscn" id="5_drops"]
+[ext_resource type="PackedScene" path="res://ui/hud/hud.tscn" id="6_hud"]
+[ext_resource type="PackedScene" path="res://ui/menus/level_up_menu/level_up_menu.tscn" id="7_level_up_menu"]
+[ext_resource type="PackedScene" path="res://systems/upgrades/upgrade_manager.tscn" id="8_upgrade_manager"]
+[ext_resource type="PackedScene" path="res://ui/menus/game_over_menu/game_over_menu.tscn" id="9_game_over"]
+[ext_resource type="PackedScene" path="res://ui/damage_numbers/damage_number_spawner.tscn" id="10_damage_numbers"]
+[ext_resource type="PackedScene" path="res://effects/death_puff/death_puff_spawner.tscn" id="11_death_puff"]
+[ext_resource type="PackedScene" path="res://ui/menus/pause_menu/pause_menu.tscn" id="12_pause_menu"]
+
+[node name="BaseLevel" type="Node3D"]
+script = ExtResource("0_level")
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="EnemySpawner" parent="." instance=ExtResource("3_spawner")]
+enemy_scene = ExtResource("2_enemy")
+config = ExtResource("4_spawn_config")
+
+[node name="DropSpawner" parent="." instance=ExtResource("5_drops")]
+
+[node name="Hud" parent="." instance=ExtResource("6_hud")]
+
+[node name="UpgradeManager" parent="." instance=ExtResource("8_upgrade_manager")]
+
+[node name="LevelUpMenu" parent="." instance=ExtResource("7_level_up_menu")]
+
+[node name="GameOverMenu" parent="." instance=ExtResource("9_game_over")]
+
+[node name="DamageNumberSpawner" parent="." instance=ExtResource("10_damage_numbers")]
+
+[node name="DeathPuffSpawner" parent="." instance=ExtResource("11_death_puff")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("12_pause_menu")]
