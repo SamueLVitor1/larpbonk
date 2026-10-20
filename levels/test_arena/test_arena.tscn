@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://dn27dwrh2nh1x"]
 
-[ext_resource type="Script" path="res://levels/test_arena/test_arena.gd" id="0_arena"]
+[ext_resource type="Script" uid="uid://cywkj5w2j514t" path="res://levels/test_arena/test_arena.gd" id="0_arena"]
 [ext_resource type="PackedScene" path="res://entities/player/player.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://entities/enemies/pig/pig.tscn" id="2_enemy"]
+[ext_resource type="PackedScene" path="res://systems/spawner/enemy_spawner.tscn" id="3_spawner"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 
@@ -50,3 +51,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
 [node name="Pig" parent="." unique_id=1067142729 instance=ExtResource("2_enemy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
+
+[node name="EnemySpawner" parent="." unique_id=1921195872 instance=ExtResource("3_spawner")]
+enemy_scene = ExtResource("2_enemy")
+ramp_duration = 20.0

@@ -50,6 +50,13 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - Considerar `MultiMeshInstance3D` para muitos inimigos iguais.
 - Meta de protótipo: 300–500 inimigos na tela com FPS estável.
 
+## Ideias futuras (backlog)
+
+- **Ondas em grupos:** spawner às vezes solta vários inimigos juntos (grupinho/círculo fechando), em vez de só um por vez.
+- **Inimigos se afastando uns dos outros:** hoje eles se sobrepõem num "bolo"; dá para adicionar uma separação simples por código (sem física).
+- **Mais tipos de inimigo:** novas cenas herdadas de `base_enemy` + `.tres` (ex.: porco grande lento com muita vida).
+- **Exportar** para macOS (app não assinado → clique direito → Abrir) e Windows.
+
 ## Fluxo de trabalho
 
 - Planos são revisados pelo dono do projeto antes de codar.
