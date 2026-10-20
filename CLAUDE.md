@@ -91,8 +91,8 @@ Feito em passos pequenos, cada um testado no jogo antes do próximo (e um commit
   - [x] 6.3 `ExperienceComponent` + `data/player/experience.tres` + HUD com barra de XP e nível
   - [x] 6.4 Tela de level up: 3 cartas (`UpgradeData` em `data/upgrades/`, `UpgradeManager`, `LevelUpMenu`)
 - [ ] **7. HUD e game over** ← *próximo*
-  - [ ] 7.1 Barra de vida do player na HUD (via `EventBus`)
-  - [ ] 7.2 Cronômetro da partida na HUD
+  - [x] 7.1 Barra de vida do player na HUD (via `EventBus`)
+  - [x] 7.2 Cronômetro da partida na HUD
   - [ ] 7.3 Game over: ao morrer, pausa e mostra tela com tempo sobrevivido e nível
   - [ ] 7.4 Botão "Jogar de novo" (recarrega a cena) e talvez "Sair"
   - [ ] 7.5 Revisar o `game_manager` (autoload) — só se precisar de estado global da partida

@@ -33,6 +33,9 @@ func _physics_process(delta: float) -> void:
 	if config == null:
 		return
 	elapsed_time += delta
+	# O spawner é o "relógio da partida": o mesmo tempo da rampa vai para a HUD.
+	if int(elapsed_time) != int(elapsed_time - delta):
+		EventBus.run_time_changed.emit(int(elapsed_time))
 	_time_until_spawn -= delta
 	if _time_until_spawn > 0.0:
 		return

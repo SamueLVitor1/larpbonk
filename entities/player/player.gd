@@ -23,8 +23,11 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 func _ready() -> void:
 	# Inimigos encontram o player por este grupo.
 	add_to_group("player")
-	health.damaged.connect(_on_damaged)
 	health.died.connect(_on_died)
+	# Repassa para o EventBus: a HUD mostra a vida sem conhecer o player.
+	health.health_changed.connect(EventBus.player_health_changed.emit)
+	# Deferred: a HUD entra na cena depois do player e perderia o valor inicial.
+	EventBus.player_health_changed.emit.call_deferred(health.current_health, health.max_health)
 
 
 func _physics_process(delta: float) -> void:
@@ -69,10 +72,6 @@ func _play(anim_name: String) -> void:
 		anim_name = anim_name.trim_suffix("-loop")
 	if anim.current_animation != anim_name and anim.has_animation(anim_name):
 		anim.play(anim_name, 0.15)
-
-
-func _on_damaged(amount: float) -> void:
-	print("Player tomou %.0f de dano (vida: %.0f/%.0f)" % [amount, health.current_health, health.max_health])
 
 
 func _on_died() -> void:

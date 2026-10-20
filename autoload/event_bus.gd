@@ -26,3 +26,11 @@ signal upgrade_choices_offered(choices: Array)
 ## O jogador escolheu esta carta.
 @warning_ignore("unused_signal")
 signal upgrade_chosen(upgrade: UpgradeData)
+
+## Vida do player mudou (dano, cura ou aumento da vida máxima).
+@warning_ignore("unused_signal")
+signal player_health_changed(current: float, max_value: float)
+
+## Tempo da partida, avisado uma vez por segundo (pausa não conta).
+@warning_ignore("unused_signal")
+signal run_time_changed(seconds: int)
