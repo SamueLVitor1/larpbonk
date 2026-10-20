@@ -6,10 +6,10 @@ extends Control
 @export var color := Color(1.0, 0.25, 0.2)
 @export var outline_color := Color(0, 0, 0, 0.8)
 ## Meia largura do quadrado da mira (pixels).
-@export var half_size: float = 34.0
+@export var half_size: float = 56.0
 ## Comprimento de cada perninha do canto (pixels).
-@export var corner_length: float = 14.0
-@export var thickness: float = 4.0
+@export var corner_length: float = 24.0
+@export var thickness: float = 6.0
 ## Quanto a mira "respira" (fração do tamanho) e quantas vezes por segundo.
 @export var pulse_amount: float = 0.12
 @export var pulse_speed: float = 3.0

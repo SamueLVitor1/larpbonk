@@ -24,14 +24,14 @@ grow_vertical = 2
 
 [node name="VBox" type="VBoxContainer" parent="Center"]
 layout_mode = 2
-theme_override_constants/separation = 18
+theme_override_constants/separation = 30
 
 [node name="Title" type="Label" parent="Center/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.35, 0.35, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 56
+theme_override_constants/outline_size = 17
+theme_override_font_sizes/font_size = 93
 text = "VOCÊ MORREU"
 horizontal_alignment = 1
 
@@ -39,8 +39,8 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 26
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 43
 text = "Tempo sobrevivido: 00:00"
 horizontal_alignment = 1
 
@@ -48,27 +48,27 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 26
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 43
 text = "Nível: 1"
 horizontal_alignment = 1
 
 [node name="Spacer" type="Control" parent="Center/VBox"]
-custom_minimum_size = Vector2(0, 12)
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
 [node name="RestartButton" type="Button" parent="Center/VBox"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(260, 56)
+custom_minimum_size = Vector2(433, 93)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 40
 text = "Jogar de novo"
 
 [node name="MainMenuButton" type="Button" parent="Center/VBox"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(260, 56)
+custom_minimum_size = Vector2(433, 93)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 40
 text = "Menu principal"

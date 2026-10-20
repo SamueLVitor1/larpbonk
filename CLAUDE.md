@@ -17,7 +17,7 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 | `data/` | Resources `.tres` com números do jogo (vida, dano, velocidade); sem código |
 | `effects/` | Efeitos visuais (partículas), ex.: `death_puff/` |
 | `levels/` | Mapas: `base_level/` (sistemas comuns) + um subdiretório por mapa com `props/` e `materials/` próprios (`temple/`; `test_arena/` para protótipo/estresse) |
-| `ui/` | `hud/` e `menus/` |
+| `ui/` | `hud/`, `menus/` e `theme/` (`larpbonk_theme.tres` + `palette.gd` com as cores) |
 | `autoload/` | Singletons globais — manter o mínimo: `EventBus` (sinais) e `GameManager` (estado entre cenas) |
 
 ## Convenções
@@ -34,6 +34,7 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - Comunicação entre sistemas desacoplados via sinais do `event_bus`.
 - `.gitkeep` mantém pastas vazias no Git; pode remover quando a pasta tiver arquivos.
 - `.godot/` é cache local e fica fora do Git.
+- **UI:** resolução base 1920×1080 (stretch `canvas_items`, janela abre em 1280×720); tamanhos de UI pensados nessa escala. Estilo NES: fonte Press Start 2P (`assets/fonts/`, importada sem antialiasing, tamanhos múltiplos de 8), cores em `Palette`, item de menu sem caixa (destaque = amarelo + cursor ►). Texturas pixel art com filtro Nearest (padrão do projeto).
 
 ## Padrões do código
 
@@ -127,6 +128,11 @@ Feito em passos pequenos, cada um testado no jogo antes do próximo (e um commit
   - [x] 12.1 Porco Rei (`entities/enemies/king_pig/`, `data/enemies/king_pig.tres`): cena herdada, ~3,5 m, 300 de vida
   - [x] 12.2 `BossSpawner` na `base_level`: solta o chefe uma vez em `spawn_time` (**30 s, só para teste**)
   - [x] 12.3 Travar mira no chefe com **R** (mira na HUD, tiros focados que atravessam a horda; câmera livre)
+
+- [x] **13. UI estilo NES (começo)**
+  - [x] 13.1 Menu principal novo (logo LARPBONK, cursor ► piscando, paisagem pixel art), feito no Claude Design
+  - [x] 13.2 `ui/theme/larpbonk_theme.tres` + `Palette`; aplicado **só** no menu principal por enquanto
+  - [x] 13.3 Resolução base 1920×1080; HUD e menus antigos reescalados (×1,667)
 
 **Depois:** escolher itens do [BACKLOG.md](BACKLOG.md) (ex.: separação entre inimigos, mais inimigos, mais armas, menu principal).
 

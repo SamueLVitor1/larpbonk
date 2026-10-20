@@ -44,6 +44,11 @@ Ao implementar uma, marcar no Roadmap do `CLAUDE.md` e apagar daqui.
 - 💎 **Gemas de valores/cores:** verde 1, azul 5, vermelha 20 XP.
 - **Cor da gema** diferente do verde dos porcos (ciano/roxo/amarelo) para destacar na horda.
 
+## 🖥️ UI
+- **Levar o estilo NES às outras telas** (pausa, game over, level up, seleção, HUD): aplicar `larpbonk_theme.tres` tela por tela; depois ligar como Theme global.
+- **Opções** no menu principal (volume, tela cheia); o botão já existe desabilitado.
+- **Parallax** nas 4 camadas da paisagem do menu.
+
 ## 🃏 Upgrades
 - **Cartas bonitas:** ícone, cor por raridade, animação.
 - **Nível máximo por upgrade** (ex.: "Força 3/5") e upgrades que exigem outro antes.

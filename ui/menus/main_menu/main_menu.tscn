@@ -1,14 +1,13 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=9 format=3]
 
-[ext_resource type="Script" path="res://ui/menus/main_menu/main_menu.gd" id="1_menu"]
-
-[sub_resource type="Gradient" id="Gradient_bg"]
-colors = PackedColorArray(0.16, 0.32, 0.2, 1, 0.05, 0.08, 0.12, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_bg"]
-gradient = SubResource("Gradient_bg")
-fill_from = Vector2(0.5, 0)
-fill_to = Vector2(0.5, 1)
+[ext_resource type="Script" path="res://ui/menus/main_menu/main_menu.gd" id="1_script"]
+[ext_resource type="Theme" path="res://ui/theme/larpbonk_theme.tres" id="2_tema"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/landscape_1_horizon.png" id="3_horizonte"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/landscape_2_far_mountains.png" id="4_mont_fundo"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/landscape_3_near_mountains.png" id="5_mont_frente"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/landscape_4_field.png" id="6_campo"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/logo.png" id="7_logo"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/cursor.png" id="8_cursor"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -17,63 +16,153 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_menu")
+theme = ExtResource("2_tema")
+script = ExtResource("1_script")
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("GradientTexture2D_bg")
-expand_mode = 1
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
 
-[node name="Center" type="CenterContainer" parent="."]
+[node name="Landscape" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
-[node name="VBox" type="VBoxContainer" parent="Center"]
-layout_mode = 2
-theme_override_constants/separation = 16
+[node name="Horizon" type="TextureRect" parent="Landscape"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -390.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("3_horizonte")
 
-[node name="Title" type="Label" parent="Center/VBox"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.55, 1, 0.5, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 14
-theme_override_font_sizes/font_size = 72
-text = "Larpbonk"
-horizontal_alignment = 1
+[node name="FarMountains" type="TextureRect" parent="Landscape"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -390.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("4_mont_fundo")
 
-[node name="Subtitle" type="Label" parent="Center/VBox"]
-layout_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-theme_override_font_sizes/font_size = 40
-text = "Adventures"
-horizontal_alignment = 1
+[node name="NearMountains" type="TextureRect" parent="Landscape"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -390.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("5_mont_frente")
 
-[node name="Spacer" type="Control" parent="Center/VBox"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
+[node name="Field" type="TextureRect" parent="Landscape"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -390.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("6_campo")
 
-[node name="PlayButton" type="Button" parent="Center/VBox"]
+[node name="Logo" type="TextureRect" parent="."]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -438.0
+offset_top = 56.0
+offset_right = 438.0
+offset_bottom = 424.0
+grow_horizontal = 2
+mouse_filter = 2
+texture = ExtResource("7_logo")
+
+[node name="Menu" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -400.0
+offset_top = 470.0
+offset_right = 400.0
+offset_bottom = 680.0
+grow_horizontal = 2
+theme_override_constants/separation = 32
+
+[node name="PlayButton" type="Button" parent="Menu"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(280, 60)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 28
-text = "Jogar"
+focus_neighbor_top = NodePath("../QuitButton")
+focus_neighbor_bottom = NodePath("../QuitButton")
+focus_next = NodePath("../QuitButton")
+focus_previous = NodePath("../QuitButton")
+text = "JOGAR"
 
-[node name="QuitButton" type="Button" parent="Center/VBox"]
+[node name="OptionsButton" type="Button" parent="Menu"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(280, 60)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 28
-text = "Sair"
+focus_mode = 0
+disabled = true
+text = "OPÇÕES"
+
+[node name="QuitButton" type="Button" parent="Menu"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+focus_neighbor_top = NodePath("../PlayButton")
+focus_neighbor_bottom = NodePath("../PlayButton")
+focus_next = NodePath("../PlayButton")
+focus_previous = NodePath("../PlayButton")
+text = "SAIR"
+
+[node name="Cursor" type="TextureRect" parent="."]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_right = 35.0
+offset_bottom = 35.0
+mouse_filter = 2
+texture = ExtResource("8_cursor")
+
+[node name="VersionLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -240.0
+offset_top = 32.0
+offset_right = -40.0
+offset_bottom = 48.0
+grow_horizontal = 0
+theme_type_variation = &"VersionLabel"
+text = "v0.1"
+horizontal_alignment = 2

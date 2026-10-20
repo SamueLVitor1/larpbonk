@@ -3,7 +3,7 @@ extends CanvasLayer
 ## Tela de cartas do level up. Pausa o jogo, mostra as opções que chegam pelo
 ## EventBus e devolve a escolhida. process_mode = Always para funcionar pausada.
 
-@export var card_size := Vector2(240, 150)
+@export var card_size := Vector2(400, 250)
 
 @onready var cards: HBoxContainer = %Cards
 
@@ -31,7 +31,7 @@ func _make_card(upgrade: UpgradeData) -> Button:
 	card.custom_minimum_size = card_size
 	card.text = "%s\n\n%s" % [upgrade.title, upgrade.description]
 	card.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	card.add_theme_font_size_override("font_size", 20)
+	card.add_theme_font_size_override("font_size", 34)
 	card.pressed.connect(_on_card_pressed.bind(upgrade))
 	return card
 

@@ -6,7 +6,7 @@ extends Control
 @export var characters: Array[CharacterData] = []
 ## Quadradinhos com cadeado depois dos personagens ("tem mais por vir").
 @export var locked_slots: int = 2
-@export var slot_size := Vector2(140, 170)
+@export var slot_size := Vector2(232, 284)
 ## Graus por segundo da vitrine girando.
 @export var spin_speed: float = 30.0
 @export_file("*.tscn") var game_scene: String = "res://levels/temple/temple.tscn"
@@ -67,7 +67,7 @@ func _make_slot(label: String, portrait: Control) -> Button:
 		placeholder.text = "?"
 		placeholder.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		placeholder.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		placeholder.add_theme_font_size_override("font_size", 48)
+		placeholder.add_theme_font_size_override("font_size", 80)
 		placeholder.modulate = Color(1, 1, 1, 0.35)
 		portrait = placeholder
 	portrait.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -76,7 +76,7 @@ func _make_slot(label: String, portrait: Control) -> Button:
 	var name_label := Label.new()
 	name_label.text = label
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.add_theme_font_size_override("font_size", 18)
+	name_label.add_theme_font_size_override("font_size", 30)
 	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	box.add_child(name_label)
 	return slot
