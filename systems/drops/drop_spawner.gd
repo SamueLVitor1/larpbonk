@@ -27,4 +27,5 @@ func _on_enemy_died(position: Vector3, xp_value: float) -> void:
 	if xp_value <= 0.0:
 		return
 	var gem := _pool.acquire() as XpGem
-	gem.drop(Vector3(position.x, 0.0, position.z), xp_value)
+	# Na altura do chão onde o inimigo estava (pode ser um morro).
+	gem.drop(Vector3(position.x, HeightTerrain.ground_height(position.x, position.z), position.z), xp_value)

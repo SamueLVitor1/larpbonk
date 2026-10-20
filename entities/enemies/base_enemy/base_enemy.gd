@@ -49,6 +49,7 @@ func on_pool_release() -> void:
 
 
 ## Anda reto até o player, só no plano XZ, e vira o corpo para ele.
+## A altura vem do terreno (sem física): sobe morro e desce vale grudado no chão.
 ## O modelo olha para +Z, por isso atan2(x, z).
 func _physics_process(delta: float) -> void:
 	# Contador simples em vez de Tween/Timer: com centenas de inimigos é mais barato.
@@ -66,7 +67,9 @@ func _physics_process(delta: float) -> void:
 	if to_target.length() <= stop_distance:
 		return
 	var direction := to_target.normalized()
-	global_position += direction * _move_speed * delta
+	var next := global_position + direction * _move_speed * delta
+	next.y = HeightTerrain.ground_height(next.x, next.z)
+	global_position = next
 	rotation.y = atan2(direction.x, direction.z)
 
 

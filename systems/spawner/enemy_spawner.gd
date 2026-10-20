@@ -6,9 +6,10 @@ extends Node3D
 @export var enemy_scene: PackedScene
 ## Números de balanceamento (data/spawner/*.tres).
 @export var config: SpawnerConfig
-## Área do chão (X/Z) onde inimigos podem nascer. Cada mapa fechado define a
-## sua no nó herdado da base_level; tamanho zero = sem limite.
-@export var spawn_bounds: Rect2 = Rect2()
+## Áreas do chão (X/Z) onde inimigos podem nascer; vale estar em qualquer uma
+## (vários retângulos montam mapas em "T" ou "L"). Cada mapa fechado define as
+## suas no nó herdado da base_level; lista vazia = sem limite.
+@export var spawn_areas: Array[Rect2] = []
 ## Quantos ângulos sortear procurando um ponto válido (fora da câmera e dentro
 ## do mapa). No canto de um mapa fechado boa parte dos pontos cai fora.
 @export var offscreen_attempts: int = 20
@@ -77,13 +78,22 @@ func _spawn_enemy() -> void:
 ## inimigo continuar nascendo longe do player e fora da câmera.
 func _find_offscreen_position(center: Vector3) -> Variant:
 	var camera := get_viewport().get_camera_3d()
-	var bounded := spawn_bounds.has_area()
 	for i in offscreen_attempts:
 		var angle := randf() * TAU
 		var point := Vector3(center.x + cos(angle) * config.spawn_radius, 0.0, center.z + sin(angle) * config.spawn_radius)
-		if bounded and not spawn_bounds.has_point(Vector2(point.x, point.z)):
+		if not _is_in_spawn_areas(Vector2(point.x, point.z)):
 			continue
+		point.y = HeightTerrain.ground_height(point.x, point.z)
 		# Testa o meio do corpo, não o pé, para não aparecer metade do porco.
 		if camera == null or not camera.is_position_in_frustum(point + Vector3.UP * 0.5):
 			return point
 	return null
+
+
+func _is_in_spawn_areas(point: Vector2) -> bool:
+	if spawn_areas.is_empty():
+		return true
+	for area in spawn_areas:
+		if area.has_point(point):
+			return true
+	return false
