@@ -1,11 +1,18 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://entities/player/player.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://assets/models/gojo_animado.glb" id="2_gojo"]
 [ext_resource type="PackedScene" path="res://entities/player/camera_rig.tscn" id="3_rig"]
 
+[ext_resource type="PackedScene" path="res://components/health_component/health_component.tscn" id="4_health"]
+[ext_resource type="PackedScene" path="res://components/hurtbox_component/hurtbox_component.tscn" id="5_hurtbox"]
+
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = 0.35
+height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2"]
+radius = 0.4
 height = 1.8
 
 [node name="Player" type="CharacterBody3D"]
@@ -19,3 +26,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_1")
 
 [node name="CameraRig" parent="." instance=ExtResource("3_rig")]
+
+[node name="HealthComponent" parent="." instance=ExtResource("4_health")]
+max_health = 100.0
+invulnerability_time = 0.5
+
+[node name="HurtboxComponent" parent="." node_paths=PackedStringArray("health") instance=ExtResource("5_hurtbox")]
+collision_layer = 8
+collision_mask = 0
+health = NodePath("../HealthComponent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HurtboxComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_2")

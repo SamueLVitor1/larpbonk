@@ -13,7 +13,13 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 @onready var model: Node3D = $Model
 @onready var camera_rig: CameraRig = $CameraRig
+@onready var health: HealthComponent = $HealthComponent
 @onready var anim: AnimationPlayer = model.find_child("AnimationPlayer") as AnimationPlayer
+
+
+func _ready() -> void:
+	health.damaged.connect(_on_damaged)
+	health.died.connect(_on_died)
 
 
 func _physics_process(delta: float) -> void:
@@ -58,3 +64,12 @@ func _play(anim_name: String) -> void:
 		anim_name = anim_name.trim_suffix("-loop")
 	if anim.current_animation != anim_name and anim.has_animation(anim_name):
 		anim.play(anim_name, 0.15)
+
+
+func _on_damaged(amount: float) -> void:
+	print("Player tomou %.0f de dano (vida: %.0f/%.0f)" % [amount, health.current_health, health.max_health])
+
+
+func _on_died() -> void:
+	# Por enquanto só avisa; o game over de verdade vem no passo 7 (HUD).
+	print("Player morreu!")

@@ -1,6 +1,9 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="PackedScene" path="res://entities/player/player.tscn" id="1_player"]
+
+[ext_resource type="PackedScene" path="res://components/hitbox_component/hitbox_component.tscn" id="2_hitbox"]
+[ext_resource type="PackedScene" path="res://assets/models/minion_pig_stylized.glb" id="3_pig"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 
@@ -23,6 +26,9 @@ albedo_color = Color(0.36, 0.5, 0.32, 1)
 material = SubResource("StandardMaterial3D_1")
 size = Vector3(100, 1, 100)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_2"]
+size = Vector3(1.2, 1.2, 1.2)
+
 [node name="TestArena" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -43,3 +49,17 @@ mesh = SubResource("BoxMesh_1")
 
 [node name="Player" parent="." instance=ExtResource("1_player")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="DamagePig" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.5, 0)
+
+[node name="Model" parent="DamagePig" instance=ExtResource("3_pig")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+
+[node name="HitboxComponent" parent="DamagePig" instance=ExtResource("2_hitbox")]
+collision_layer = 0
+collision_mask = 8
+damage = 10.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DamagePig/HitboxComponent"]
+shape = SubResource("BoxShape3D_2")

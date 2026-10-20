@@ -13,7 +13,7 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 | `entities/` | Coisas que vivem no mundo: `player/`, `enemies/` (`base_enemy/` + um subdiretório por inimigo), `pickups/` (XP, baús, cura) |
 | `weapons/` | Armas automáticas (`base_weapon/`) e `projectiles/` |
 | `systems/` | Lógica não-visual: `spawner/` (ondas), `pooling/` (reuso de objetos), `upgrades/` |
-| `components/` | Nós reutilizáveis por composição: `health_component/`, `hitbox_component/` |
+| `components/` | Nós reutilizáveis por composição: `health_component/`, `hurtbox_component/` (recebe dano), `hitbox_component/` (causa dano) |
 | `data/` | Resources `.tres` com números do jogo (vida, dano, velocidade); sem código |
 | `levels/` | Mapas/arenas (`test_arena/` para protótipo) |
 | `ui/` | `hud/` e `menus/` |
