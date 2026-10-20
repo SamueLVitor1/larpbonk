@@ -42,3 +42,8 @@ signal player_died
 ## Um inimigo em `position` tomou `amount` de dano (números de dano, sons...).
 @warning_ignore("unused_signal")
 signal enemy_damaged(position: Vector3, amount: float)
+
+## O player travou a mira em `target` (tecla R), ou destravou (`target` = null).
+## A arma foca os tiros nele e a HUD desenha a mira; a câmera continua livre.
+@warning_ignore("unused_signal")
+signal lock_on_changed(target: Node3D)

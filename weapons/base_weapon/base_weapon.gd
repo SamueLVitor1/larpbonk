@@ -1,6 +1,7 @@
 class_name BaseWeapon
 extends Node3D
-## Arma automática: a cada intervalo atira no inimigo mais perto dentro do alcance.
+## Arma automática: a cada intervalo atira no inimigo mais perto dentro do alcance
+## (ou no alvo da mira travada, se ele estiver no alcance).
 ## Os números vêm de um WeaponStats (.tres em data/weapons/) e as balas de um ObjectPool.
 
 @export var stats: WeaponStats
@@ -9,11 +10,12 @@ extends Node3D
 @export var pool_initial_size: int = 30
 ## Altura de onde a bala sai, em relação ao pé do player.
 @export var muzzle_height: float = 1.0
-## Altura do meio do corpo do inimigo, para onde mirar.
+## Altura para onde mirar quando o alvo não diz a dele (BaseEnemy.aim_height).
 @export var target_height: float = 0.45
 
 var _time_until_fire: float = 0.0
 var _pool: ObjectPool
+var _locked_target: Node3D
 
 
 ## O pool é um Node (não Node3D): por isso as balas, filhas dele, NÃO herdam a
@@ -31,6 +33,7 @@ func _ready() -> void:
 	_pool.initial_size = pool_initial_size
 	_pool.warm_up = true
 	add_child(_pool)
+	EventBus.lock_on_changed.connect(func(target: Node3D) -> void: _locked_target = target)
 
 
 func _physics_process(delta: float) -> void:
@@ -39,11 +42,21 @@ func _physics_process(delta: float) -> void:
 	_time_until_fire -= delta
 	if _time_until_fire > 0.0:
 		return
-	var target := _find_nearest_enemy()
+	var target := _choose_target()
 	if target == null:
 		return  # sem alvo: fica pronta e atira assim que algum entrar no alcance
 	_time_until_fire = stats.fire_interval
 	_fire_at(target)
+
+
+## Mira travada manda, mas só dentro do alcance: fora dele, volta ao mais perto
+## para o player não ficar indefeso enquanto foge do chefe.
+func _choose_target() -> Node3D:
+	if _locked_target and LockOn.is_valid_target(_locked_target):
+		var range_sq := stats.fire_range * stats.fire_range
+		if global_position.distance_squared_to(_locked_target.global_position) <= range_sq:
+			return _locked_target
+	return _find_nearest_enemy()
 
 
 ## Percorre os inimigos ativos e pega o mais perto. Compara distância ao quadrado
@@ -62,6 +75,9 @@ func _find_nearest_enemy() -> Node3D:
 
 func _fire_at(target: Node3D) -> void:
 	var from := global_position + Vector3.UP * muzzle_height
-	var to := target.global_position + Vector3.UP * target_height
+	var height := (target as BaseEnemy).aim_height if target is BaseEnemy else target_height
+	var to := target.global_position + Vector3.UP * height
 	var projectile := _pool.acquire() as Projectile
-	projectile.launch(from, to - from, stats)
+	# Tiro na mira travada atravessa a horda e só acerta o alvo.
+	var only_target: Node = target if target == _locked_target else null
+	projectile.launch(from, to - from, stats, only_target)

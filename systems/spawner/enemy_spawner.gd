@@ -64,7 +64,7 @@ func _spawn_enemy() -> void:
 		return
 	if get_tree().get_nodes_in_group("enemies").size() >= config.max_enemies:
 		return
-	var spawn_position: Variant = _find_offscreen_position(player.global_position)
+	var spawn_position: Variant = find_spawn_position(player.global_position)
 	if spawn_position == null:
 		# Tudo à vista (raro): pula esta vez em vez de brotar na cara do player.
 		return
@@ -76,7 +76,8 @@ func _spawn_enemy() -> void:
 ## Com câmera em 3ª pessoa, na prática eles nascem atrás e dos lados.
 ## Pontos fora do mapa são descartados (e não empurrados para dentro), para o
 ## inimigo continuar nascendo longe do player e fora da câmera.
-func _find_offscreen_position(center: Vector3) -> Variant:
+## Pública: o BossSpawner usa a mesma regra. Devolve null se não achar.
+func find_spawn_position(center: Vector3) -> Variant:
 	var camera := get_viewport().get_camera_3d()
 	for i in offscreen_attempts:
 		var angle := randf() * TAU

@@ -24,7 +24,8 @@ Ao implementar uma, marcar no Roadmap do `CLAUDE.md` e apagar daqui.
 
 ## 🐷 Inimigos
 - 🐗 **Porcão:** grande, lento, muita vida.
-- 👑 **Porco Rei:** chefe com coroa; solta baú ao morrer.
+- 👑 **Porco Rei (continuação):** já existe e aparece aos 30 s (teste; subir para ~5 min). Falta: barra de vida de chefe na HUD + aviso "chefe chegou", baú ao morrer, ataques (investida, pisão), animações (o modelo não tem).
+- **Mira travada:** trocar de alvo com R segurado / travar inimigos comuns? Indicador na borda da tela quando o alvo travado está fora da vista.
 - 🪖 **Porco de capacete:** toma menos dano.
 - 💨 **Porquinho rápido:** pequeno, frágil e veloz.
 - 💣 **Porco-bomba:** explode perto do player.

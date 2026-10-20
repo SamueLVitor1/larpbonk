@@ -13,6 +13,8 @@
 [ext_resource type="PackedScene" path="res://ui/damage_numbers/damage_number_spawner.tscn" id="10_damage_numbers"]
 [ext_resource type="PackedScene" path="res://effects/death_puff/death_puff_spawner.tscn" id="11_death_puff"]
 [ext_resource type="PackedScene" path="res://ui/menus/pause_menu/pause_menu.tscn" id="12_pause_menu"]
+[ext_resource type="Script" path="res://systems/spawner/boss_spawner.gd" id="13_boss_spawner"]
+[ext_resource type="PackedScene" path="res://entities/enemies/king_pig/king_pig.tscn" id="14_king_pig"]
 
 [node name="BaseLevel" type="Node3D"]
 script = ExtResource("0_level")
@@ -23,6 +25,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 [node name="EnemySpawner" parent="." instance=ExtResource("3_spawner")]
 enemy_scene = ExtResource("2_enemy")
 config = ExtResource("4_spawn_config")
+
+[node name="BossSpawner" type="Node" parent="." node_paths=PackedStringArray("enemy_spawner")]
+script = ExtResource("13_boss_spawner")
+boss_scene = ExtResource("14_king_pig")
+enemy_spawner = NodePath("../EnemySpawner")
 
 [node name="DropSpawner" parent="." instance=ExtResource("5_drops")]
 

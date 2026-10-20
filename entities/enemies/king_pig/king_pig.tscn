@@ -1,0 +1,26 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://entities/enemies/base_enemy/base_enemy.tscn" id="1_base"]
+[ext_resource type="Resource" path="res://data/enemies/king_pig.tres" id="2_stats"]
+[ext_resource type="PackedScene" path="res://assets/models/king_pig_stylized.glb" id="3_model"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hurt"]
+size = Vector3(2.6, 3.25, 2.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hit"]
+size = Vector3(2.85, 3.0, 2.85)
+
+[node name="KingPig" groups=["bosses"] instance=ExtResource("1_base")]
+stats = ExtResource("2_stats")
+aim_height = 1.75
+
+[node name="KingPigModel" parent="Model" instance=ExtResource("3_model")]
+transform = Transform3D(2.3, 0, 0, 0, 2.3, 0, 0, 0, 2.3, 0, 0, 0)
+
+[node name="CollisionShape3D" parent="HurtboxComponent" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.62, 0)
+shape = SubResource("BoxShape3D_hurt")
+
+[node name="CollisionShape3D" parent="HitboxComponent" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("BoxShape3D_hit")

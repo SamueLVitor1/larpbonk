@@ -37,7 +37,8 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 
 ## Padrões do código
 
-- **Grupos:** `"player"` (o player) e `"enemies"` (só inimigos *ativos*). Sistemas se acham por grupo, sem ligação manual na cena.
+- **Grupos:** `"player"` (o player), `"enemies"` (só inimigos *ativos*) e `"bosses"` (chefes; podem ser travados com **R**). Sistemas se acham por grupo, sem ligação manual na cena.
+- **Mira travada (R):** `LockOn` (nó do player) escolhe o chefe mais perto e emite `EventBus.lock_on_changed(target)`; a arma prioriza o alvo (se no alcance) com balas que atravessam o resto (`HitboxComponent.only_target`) e a HUD desenha a mira (`LockOnReticle`). A câmera **não** é travada (fica livre com o mouse). `BaseEnemy.aim_height` diz para onde mirar em cada inimigo.
 - **Pooling (`ObjectPool`):** `acquire()` / `release()`; o objeto pode ter `on_pool_acquire()` (resetar estado) e `on_pool_release()`. Para "morrer", usar `ObjectPool.release_or_free(self)` (funciona com ou sem pool). Cada sistema cria seu pool por código (`EnemyPool` no spawner, `ProjectilePool` na arma).
 - O pool é `Node` (não `Node3D`) de propósito: os filhos não herdam a posição de quem está acima (balas não andam junto com o player).
 - **Morte/sumir durante colisão → `call_deferred`:** desligar áreas no meio da checagem de colisão dá erro no Godot.
@@ -121,6 +122,11 @@ Feito em passos pequenos, cada um testado no jogo antes do próximo (e um commit
   - [x] 11.2 Templo (`levels/temple/`): pátio 80×80 fechado por muro, peças reutilizáveis em `props/` (muro, pilar, lanterna, torii) com colisão para o player; `EnemySpawner.spawn_bounds` impede porcos fora do mapa. A seleção de personagem abre o templo. **Inimigos e balas ainda atravessam obstáculos** (sem física)
   - [x] 11.3 Relevo: `HeightTerrain` + `TerrainArea` (`systems/terrain/`); inimigos, spawner e gemas seguem a altura do chão
   - [x] 11.4 Jardim ao norte do templo (160×120): morros, platô de 10 m com rampa, cachoeira (`props/waterfall.tscn` + `assets/shaders/water.gdshader`), lago raso, vegetação via `TerrainScatter`, sebe + paredes invisíveis na borda. `spawn_areas` com 2 retângulos (templo + jardim)
+
+- [x] **12. Primeiro chefe**
+  - [x] 12.1 Porco Rei (`entities/enemies/king_pig/`, `data/enemies/king_pig.tres`): cena herdada, ~3,5 m, 300 de vida
+  - [x] 12.2 `BossSpawner` na `base_level`: solta o chefe uma vez em `spawn_time` (**30 s, só para teste**)
+  - [x] 12.3 Travar mira no chefe com **R** (mira na HUD, tiros focados que atravessam a horda; câmera livre)
 
 **Depois:** escolher itens do [BACKLOG.md](BACKLOG.md) (ex.: separação entre inimigos, mais inimigos, mais armas, menu principal).
 

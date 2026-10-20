@@ -10,6 +10,7 @@
 [ext_resource type="Resource" path="res://data/weapons/blue_orb.tres" id="7_weapon_stats"]
 [ext_resource type="PackedScene" path="res://components/experience_component/experience_component.tscn" id="8_xp"]
 [ext_resource type="Resource" path="res://data/player/experience.tres" id="9_xp_config"]
+[ext_resource type="Script" path="res://entities/player/lock_on.gd" id="20_lock_on"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = 0.35
@@ -49,3 +50,6 @@ stats = ExtResource("7_weapon_stats")
 
 [node name="ExperienceComponent" parent="." instance=ExtResource("8_xp")]
 config = ExtResource("9_xp_config")
+
+[node name="LockOn" type="Node" parent="."]
+script = ExtResource("20_lock_on")

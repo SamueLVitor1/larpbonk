@@ -9,6 +9,8 @@ extends Node3D
 @export var stop_distance: float = 0.5
 ## Quanto tempo o inimigo fica branco ao tomar dano (segundos).
 @export var hit_flash_duration: float = 0.08
+## Altura do meio do corpo (em relação ao pé): para onde as balas e a mira travada apontam.
+@export var aim_height: float = 0.45
 
 ## Um material só, compartilhado por todos os inimigos: piscar é só ligar/desligar
 ## o overlay em cada malha, sem criar nada novo a cada acerto.

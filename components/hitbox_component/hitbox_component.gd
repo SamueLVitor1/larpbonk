@@ -11,6 +11,10 @@ signal hit(hurtbox: HurtboxComponent)
 ## Para depois do primeiro acerto (ex.: bala). Chame reset() para reutilizar.
 @export var hit_once: bool = false
 
+## Se definido, só acerta hurtboxes desse nó e atravessa o resto
+## (ex.: bala da mira travada passando pela horda até o chefe).
+var only_target: Node
+
 var _spent := false
 
 
@@ -24,6 +28,8 @@ func _physics_process(_delta: float) -> void:
 		return
 	for area in get_overlapping_areas():
 		if area is HurtboxComponent:
+			if only_target and not (is_instance_valid(only_target) and only_target.is_ancestor_of(area)):
+				continue
 			area.receive_hit(damage)
 			hit.emit(area)
 			if hit_once:
