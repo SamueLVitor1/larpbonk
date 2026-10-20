@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="EnemyStats" format=3 uid="uid://dstb1ulkf8dyf"]
+
+[ext_resource type="Script" uid="uid://c1x86xx2ehh1o" path="res://entities/enemies/base_enemy/enemy_stats.gd" id="1_stats"]
+
+[resource]
+script = ExtResource("1_stats")
+contact_damage = 25.0

@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://entities/enemies/base_enemy/base_enemy.tscn" id="1_base"]
+[ext_resource type="Resource" path="res://data/enemies/pig.tres" id="2_stats"]
+[ext_resource type="PackedScene" path="res://assets/models/minion_pig_stylized.glb" id="3_model"]
+
+[node name="Pig" instance=ExtResource("1_base")]
+stats = ExtResource("2_stats")
+
+[node name="PigModel" parent="Model" instance=ExtResource("3_model")]
+transform = Transform3D(0.18, 0, 0, 0, 0.18, 0, 0, 0, 0.18, 0, 0.03, 0)
