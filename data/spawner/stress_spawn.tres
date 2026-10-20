@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="SpawnerConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://systems/spawner/spawner_config.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+start_interval = 0.02
+end_interval = 0.02
+ramp_duration = 1.0
+spawn_radius = 20.0
+max_enemies = 500

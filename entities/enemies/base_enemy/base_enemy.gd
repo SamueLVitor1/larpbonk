@@ -16,9 +16,23 @@ var _move_speed: float = 3.0
 
 
 func _ready() -> void:
-	add_to_group("enemies")
 	_apply_stats()
 	health.died.connect(_on_died)
+	# Vindo de um pool, só entra no grupo ao sair da reserva (on_pool_acquire);
+	# senão os guardados contariam no limite do spawner e na tecla K.
+	if not has_meta(&"object_pool"):
+		add_to_group("enemies")
+
+
+## Saiu da reserva: volta com vida cheia e passa a contar como inimigo ativo.
+func on_pool_acquire() -> void:
+	health.reset()
+	add_to_group("enemies")
+
+
+## Voltou para a reserva: deixa de contar como inimigo.
+func on_pool_release() -> void:
+	remove_from_group("enemies")
 
 
 ## Anda reto até o player, só no plano XZ, e vira o corpo para ele.
@@ -51,5 +65,11 @@ func _apply_stats() -> void:
 
 
 func _on_died() -> void:
-	# Por enquanto só some; no passo 4 (pooling) volta para a reserva.
-	queue_free()
+	# Deferred: a morte acontece no meio da checagem de colisão da hitbox,
+	# e desligar áreas de colisão nesse momento dá erro no Godot.
+	_despawn.call_deferred()
+
+
+func _despawn() -> void:
+	# Volta para a reserva se veio de um pool; senão (ex.: porco fixo da arena) apaga.
+	ObjectPool.release_or_free(self)

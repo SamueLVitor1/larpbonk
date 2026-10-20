@@ -1,16 +1,32 @@
 class_name EnemySpawner
 extends Node3D
 ## Cria inimigos a cada intervalo, num ponto aleatório de um círculo em volta do player.
-## Por enquanto usa instantiate(); no passo 4 passa a pegar do pool.
+## Os inimigos vêm de um ObjectPool próprio (filho do spawner), não de instantiate().
 
 @export var enemy_scene: PackedScene
 ## Números de balanceamento (data/spawner/*.tres).
 @export var config: SpawnerConfig
 ## Quantos ângulos sortear procurando um ponto fora da câmera.
 @export var offscreen_attempts: int = 10
+## Inimigos criados já no começo, guardados na reserva.
+@export var pool_initial_size: int = 50
 
 var elapsed_time: float = 0.0
 var _time_until_spawn: float = 0.0
+var _pool: ObjectPool
+
+
+## O pool é criado por código para o spawner funcionar só com o enemy_scene,
+## sem precisar montar nada a mais na cena.
+func _ready() -> void:
+	if enemy_scene == null:
+		push_warning("EnemySpawner sem enemy_scene.")
+		return
+	_pool = ObjectPool.new()
+	_pool.name = "EnemyPool"
+	_pool.scene = enemy_scene
+	_pool.initial_size = pool_initial_size
+	add_child(_pool)
 
 
 func _physics_process(delta: float) -> void:
@@ -33,7 +49,7 @@ func current_interval() -> float:
 
 
 func _spawn_enemy() -> void:
-	if enemy_scene == null:
+	if _pool == null:
 		return
 	var player := get_tree().get_first_node_in_group("player") as Node3D
 	if player == null:
@@ -44,9 +60,7 @@ func _spawn_enemy() -> void:
 	if spawn_position == null:
 		# Tudo à vista (raro): pula esta vez em vez de brotar na cara do player.
 		return
-	var enemy := enemy_scene.instantiate() as Node3D
-	# Filho do spawner: a arena fica organizada e dá para limpar tudo junto.
-	add_child(enemy)
+	var enemy := _pool.acquire() as Node3D
 	enemy.global_position = spawn_position
 
 
