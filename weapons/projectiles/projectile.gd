@@ -18,7 +18,12 @@ func _ready() -> void:
 
 
 ## Posiciona e dispara. Chamado por quem atira, logo depois de pegar do pool.
-func launch(from: Vector3, toward: Vector3) -> void:
+## Com stats, usa os números da arma; sem, usa os padrões do Inspector.
+func launch(from: Vector3, toward: Vector3, stats: WeaponStats = null) -> void:
+	if stats:
+		speed = stats.projectile_speed
+		lifetime = stats.projectile_lifetime
+		hitbox.damage = stats.damage
 	global_position = from
 	direction = toward.normalized()
 	_time_left = lifetime

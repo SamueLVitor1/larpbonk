@@ -33,6 +33,15 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - `.gitkeep` mantém pastas vazias no Git; pode remover quando a pasta tiver arquivos.
 - `.godot/` é cache local e fica fora do Git.
 
+## Padrões do código
+
+- **Grupos:** `"player"` (o player) e `"enemies"` (só inimigos *ativos*). Sistemas se acham por grupo, sem ligação manual na cena.
+- **Pooling (`ObjectPool`):** `acquire()` / `release()`; o objeto pode ter `on_pool_acquire()` (resetar estado) e `on_pool_release()`. Para "morrer", usar `ObjectPool.release_or_free(self)` (funciona com ou sem pool). Cada sistema cria seu pool por código (`EnemyPool` no spawner, `ProjectilePool` na arma).
+- O pool é `Node` (não `Node3D`) de propósito: os filhos não herdam a posição de quem está acima (balas não andam junto com o player).
+- **Morte/sumir durante colisão → `call_deferred`:** desligar áreas no meio da checagem de colisão dá erro no Godot.
+- **`HitboxComponent.hit_once`:** ligado = um acerto e para (bala, `reset()` ao reutilizar); desligado = dano contínuo (contato do inimigo, limitado pela invulnerabilidade do alvo).
+- **Debug** (só no editor, em `test_arena.gd`): tecla **K** mata todos os inimigos; overlay com FPS e nº de inimigos. Para estresse, trocar o Config do spawner por `data/spawner/stress_spawn.tres`.
+
 ## Camadas de colisão (3D)
 
 | Layer | Nome | Uso |
@@ -48,7 +57,7 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - Inimigos, projéteis e gemas de XP passam por pooling; evitar `instantiate()`/`queue_free()` em massa.
 - Inimigos não usam física completa por unidade; preferir movimento simples no código.
 - Considerar `MultiMeshInstance3D` para muitos inimigos iguais.
-- Meta de protótipo: 300–500 inimigos na tela com FPS estável.
+- Meta de protótipo: 300–500 inimigos na tela com FPS estável. **Medido:** 500 porcos a ~81 FPS (debug, Mac M2), ainda sem MultiMesh. Repetir o teste quando os inimigos pararem de se sobrepor.
 
 ## Ideias futuras (backlog)
 
@@ -57,7 +66,6 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - **Mais tipos de inimigo:** novas cenas herdadas de `base_enemy` + `.tres` (ex.: porco grande lento com muita vida).
 - **Visual temático da bala:** trocar a esfera azul por algo do Gojo (Azul/Vermelho), com efeito de brilho. Se vier do Sketchfab: licença CC0/CC-BY (dar crédito) e low poly.
 - **Bala que atravessa (pierce):** upgrade clássico; `HitboxComponent` com contador de acertos em vez de `hit_once`.
-- **Aquecer shaders:** a 1ª bala dá uma travadinha (compilação de shader); desenhar uma escondida no carregamento.
 - **Exportar** para macOS (app não assinado → clique direito → Abrir) e Windows.
 
 ## Fluxo de trabalho

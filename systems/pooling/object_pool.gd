@@ -11,6 +11,9 @@ extends Node
 @export var scene: PackedScene
 ## Quantos criar já no começo, para não engasgar na primeira onda.
 @export var initial_size: int = 50
+## Desenha um objeto escondido na frente da câmera por alguns frames ao iniciar,
+## para o Godot compilar o shader antes do primeiro uso (evita a "travadinha").
+@export var warm_up: bool = false
 
 var _available: Array[Node] = []
 
@@ -18,6 +21,26 @@ var _available: Array[Node] = []
 func _ready() -> void:
 	for i in initial_size:
 		_available.append(_create())
+	if warm_up:
+		_warm_up_shaders()
+
+
+## Mostra um objeto (ainda desligado: sem script nem colisão) bem na frente da
+## câmera, espera ele ser desenhado e esconde de novo.
+func _warm_up_shaders() -> void:
+	if _available.is_empty() or not (_available[-1] is Node3D):
+		return
+	var node := _available[-1] as Node3D
+	await get_tree().process_frame  # garante que a câmera já existe
+	var camera := get_viewport().get_camera_3d()
+	if camera == null or node not in _available:
+		return
+	node.global_position = camera.global_position - camera.global_basis.z * 2.0
+	node.visible = true
+	for i in 2:
+		await get_tree().process_frame
+	if node in _available:  # pode ter sido pego nesse meio tempo
+		node.visible = false
 
 
 ## Pega um objeto da reserva (ou cria um, se ela estiver vazia) e liga.
