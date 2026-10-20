@@ -59,6 +59,51 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - Considerar `MultiMeshInstance3D` para muitos inimigos iguais.
 - Meta de protótipo: 300–500 inimigos na tela com FPS estável. **Medido:** 500 porcos a ~81 FPS (debug, Mac M2), ainda sem MultiMesh. Repetir o teste quando os inimigos pararem de se sobrepor.
 
+## Roadmap (progresso)
+
+Feito em passos pequenos, cada um testado no jogo antes do próximo (e um commit por passo).
+
+- [x] **1. Vida e dano** — `HealthComponent` (vida, invulnerabilidade, `reset()`), `HurtboxComponent` (recebe), `HitboxComponent` (causa, `hit_once`).
+- [x] **2. Primeiro inimigo**
+  - [x] 2.1 `EnemyStats` + `data/enemies/pig.tres`
+  - [x] 2.2 Cena base `base_enemy.tscn` (componentes + lê o `.tres`)
+  - [x] 2.3 Persegue o player (sem física, vira para ele)
+  - [x] 2.4 `pig.tscn` = cena herdada da base + modelo do porco
+  - [x] 2.5 Tecla **K** (debug) mata todos
+- [x] **3. Spawner**
+  - [x] 3.1 Spawna num círculo em volta do player
+  - [x] 3.2 Só fora da câmera
+  - [x] 3.3 Ritmo acelera com o tempo (rampa)
+  - [x] 3.4 `SpawnerConfig` + `data/spawner/default_spawn.tres`
+- [x] **4. Pooling**
+  - [x] 4.1 `ObjectPool` genérico
+  - [x] 4.2 Inimigo com `on_pool_acquire/release`
+  - [x] 4.3 Spawner usa o pool
+  - [x] 4.4 Estresse: 500 porcos a ~81 FPS (overlay de FPS no debug)
+- [x] **5. Arma automática**
+  - [x] 5.1 Projétil (esfera azul) voando reto
+  - [x] 5.2 `BaseWeapon` mira no inimigo mais perto
+  - [x] 5.3 Acerto: dano, inimigo morre e volta pro pool
+  - [x] 5.4 `WeaponStats` + `data/weapons/blue_orb.tres`, pool de balas, aquecimento de shader
+- [x] **6. XP e level up**
+  - [x] 6.1 `EventBus` (autoload) + gema de XP ao morrer (`DropSpawner`)
+  - [x] 6.2 Ímã e coleta (`pickup_radius` no player)
+  - [x] 6.3 `ExperienceComponent` + `data/player/experience.tres` + HUD com barra de XP e nível
+  - [x] 6.4 Tela de level up: 3 cartas (`UpgradeData` em `data/upgrades/`, `UpgradeManager`, `LevelUpMenu`)
+- [ ] **7. HUD e game over** ← *próximo*
+  - [ ] 7.1 Barra de vida do player na HUD (via `EventBus`)
+  - [ ] 7.2 Cronômetro da partida na HUD
+  - [ ] 7.3 Game over: ao morrer, pausa e mostra tela com tempo sobrevivido e nível
+  - [ ] 7.4 Botão "Jogar de novo" (recarrega a cena) e talvez "Sair"
+  - [ ] 7.5 Revisar o `game_manager` (autoload) — só se precisar de estado global da partida
+
+Depois do 7: escolher itens do backlog abaixo (ex.: separação entre inimigos, mais inimigos, mais armas).
+
+### Lembretes para continuar
+- Mudou `project.godot` (autoload, layers)? **Projeto → Recarregar Projeto Atual** no Godot.
+- Se o Godot perguntar para recarregar uma cena alterada fora dele, escolha **recarregar** (não salvar por cima).
+- Testes rápidos: **K** mata todos; overlay mostra FPS/inimigos; para estresse, Config do spawner → `stress_spawn.tres`.
+
 ## Ideias futuras (backlog)
 
 - **Ondas em grupos:** spawner às vezes solta vários inimigos juntos (grupinho/círculo fechando), em vez de só um por vez.
@@ -66,6 +111,9 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - **Mais tipos de inimigo:** novas cenas herdadas de `base_enemy` + `.tres` (ex.: porco grande lento com muita vida).
 - **Visual temático da bala:** trocar a esfera azul por algo do Gojo (Azul/Vermelho), com efeito de brilho. Se vier do Sketchfab: licença CC0/CC-BY (dar crédito) e low poly.
 - **Bala que atravessa (pierce):** upgrade clássico; `HitboxComponent` com contador de acertos em vez de `hit_once`.
+- **Cartas de upgrade bonitas:** hoje são botões padrão; ícone, cor por raridade, animação.
+- **Nível máximo por upgrade** (ex.: "Força 3/5") e upgrades que exigem outro antes.
+- **Cor da gema de XP** diferente dos inimigos verdes (ciano/roxo/amarelo) para destacar na horda.
 - **Exportar** para macOS (app não assinado → clique direito → Abrir) e Windows.
 
 ## Fluxo de trabalho

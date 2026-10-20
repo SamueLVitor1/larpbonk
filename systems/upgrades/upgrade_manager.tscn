@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://systems/upgrades/upgrade_manager.gd" id="1_manager"]
+[ext_resource type="Script" path="res://systems/upgrades/upgrade_data.gd" id="2_upgrade_data"]
+[ext_resource type="Resource" path="res://data/upgrades/strength.tres" id="up_strength"]
+[ext_resource type="Resource" path="res://data/upgrades/fire_rate.tres" id="up_fire_rate"]
+[ext_resource type="Resource" path="res://data/upgrades/swiftness.tres" id="up_swiftness"]
+[ext_resource type="Resource" path="res://data/upgrades/magnet.tres" id="up_magnet"]
+[ext_resource type="Resource" path="res://data/upgrades/vigor.tres" id="up_vigor"]
+
+[node name="UpgradeManager" type="Node"]
+script = ExtResource("1_manager")
+upgrades = Array[ExtResource("2_upgrade_data")]([ExtResource("up_strength"), ExtResource("up_fire_rate"), ExtResource("up_swiftness"), ExtResource("up_magnet"), ExtResource("up_vigor")])

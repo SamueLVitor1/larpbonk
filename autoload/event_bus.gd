@@ -18,3 +18,11 @@ signal player_xp_changed(current: float, needed: float, level: int)
 ## O player subiu para o nível `level`.
 @warning_ignore("unused_signal")
 signal player_leveled_up(level: int)
+
+## Hora de escolher: `choices` são as cartas (UpgradeData) sorteadas.
+@warning_ignore("unused_signal")
+signal upgrade_choices_offered(choices: Array)
+
+## O jogador escolheu esta carta.
+@warning_ignore("unused_signal")
+signal upgrade_chosen(upgrade: UpgradeData)

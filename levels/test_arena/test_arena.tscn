@@ -7,6 +7,8 @@
 [ext_resource type="Resource" path="res://data/spawner/default_spawn.tres" id="4_spawn_config"]
 [ext_resource type="PackedScene" path="res://systems/drops/drop_spawner.tscn" id="5_drops"]
 [ext_resource type="PackedScene" path="res://ui/hud/hud.tscn" id="6_hud"]
+[ext_resource type="PackedScene" path="res://ui/menus/level_up_menu/level_up_menu.tscn" id="7_level_up_menu"]
+[ext_resource type="PackedScene" path="res://systems/upgrades/upgrade_manager.tscn" id="8_upgrade_manager"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 
@@ -62,3 +64,7 @@ config = ExtResource("4_spawn_config")
 [node name="DropSpawner" parent="." instance=ExtResource("5_drops")]
 
 [node name="Hud" parent="." instance=ExtResource("6_hud")]
+
+[node name="UpgradeManager" parent="." instance=ExtResource("8_upgrade_manager")]
+
+[node name="LevelUpMenu" parent="." instance=ExtResource("7_level_up_menu")]

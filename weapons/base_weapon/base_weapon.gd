@@ -19,6 +19,9 @@ var _pool: ObjectPool
 ## O pool é um Node (não Node3D): por isso as balas, filhas dele, NÃO herdam a
 ## posição do player e voam livres mesmo com o pool pendurado na arma.
 func _ready() -> void:
+	# Cópia própria: upgrades mexem nela sem alterar o .tres compartilhado.
+	if stats:
+		stats = stats.duplicate()
 	if projectile_scene == null:
 		push_warning("%s sem projectile_scene." % name)
 		return
