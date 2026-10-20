@@ -4,16 +4,8 @@ extends Node3D
 ## Por enquanto usa instantiate(); no passo 4 passa a pegar do pool.
 
 @export var enemy_scene: PackedScene
-## Intervalo entre inimigos no começo da partida (segundos).
-@export var start_interval: float = 1.5
-## Intervalo mínimo, alcançado ao fim da rampa.
-@export var end_interval: float = 0.3
-## Quanto tempo (segundos) leva para ir do start ao end.
-@export var ramp_duration: float = 180.0
-## Distância do player em que os inimigos nascem (metros).
-@export var spawn_radius: float = 15.0
-## Teto de inimigos vivos, para não travar enquanto não há pooling.
-@export var max_enemies: int = 100
+## Números de balanceamento (data/spawner/*.tres).
+@export var config: SpawnerConfig
 ## Quantos ângulos sortear procurando um ponto fora da câmera.
 @export var offscreen_attempts: int = 10
 
@@ -22,6 +14,8 @@ var _time_until_spawn: float = 0.0
 
 
 func _physics_process(delta: float) -> void:
+	if config == null:
+		return
 	elapsed_time += delta
 	_time_until_spawn -= delta
 	if _time_until_spawn > 0.0:
@@ -34,8 +28,8 @@ func _physics_process(delta: float) -> void:
 ## ease(..., 0.5) faz cair mais rápido no começo e suavizar no fim,
 ## assim o primeiro minuto já esquenta sem virar caos logo de cara.
 func current_interval() -> float:
-	var progress := clampf(elapsed_time / ramp_duration, 0.0, 1.0)
-	return lerpf(start_interval, end_interval, ease(progress, 0.5))
+	var progress := clampf(elapsed_time / config.ramp_duration, 0.0, 1.0)
+	return lerpf(config.start_interval, config.end_interval, ease(progress, 0.5))
 
 
 func _spawn_enemy() -> void:
@@ -44,7 +38,7 @@ func _spawn_enemy() -> void:
 	var player := get_tree().get_first_node_in_group("player") as Node3D
 	if player == null:
 		return
-	if get_tree().get_nodes_in_group("enemies").size() >= max_enemies:
+	if get_tree().get_nodes_in_group("enemies").size() >= config.max_enemies:
 		return
 	var spawn_position: Variant = _find_offscreen_position(player.global_position)
 	if spawn_position == null:
@@ -62,7 +56,7 @@ func _find_offscreen_position(center: Vector3) -> Variant:
 	var camera := get_viewport().get_camera_3d()
 	for i in offscreen_attempts:
 		var angle := randf() * TAU
-		var point := Vector3(center.x + cos(angle) * spawn_radius, 0.0, center.z + sin(angle) * spawn_radius)
+		var point := Vector3(center.x + cos(angle) * config.spawn_radius, 0.0, center.z + sin(angle) * config.spawn_radius)
 		# Testa o meio do corpo, não o pé, para não aparecer metade do porco.
 		if camera == null or not camera.is_position_in_frustum(point + Vector3.UP * 0.5):
 			return point
