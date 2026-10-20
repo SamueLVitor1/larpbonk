@@ -27,7 +27,7 @@ material = SubResource("StandardMaterial3D_1")
 size = Vector3(100, 1, 100)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2"]
-size = Vector3(1.2, 1.2, 1.2)
+size = Vector3(1, 0.9, 1)
 
 [node name="TestArena" type="Node3D"]
 
@@ -51,10 +51,10 @@ mesh = SubResource("BoxMesh_1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 
 [node name="DamagePig" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
 
 [node name="Model" parent="DamagePig" instance=ExtResource("3_pig")]
-transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+transform = Transform3D(0.18, 0, 0, 0, 0.18, 0, 0, 0, 0.18, 0, 0.03, 0)
 
 [node name="HitboxComponent" parent="DamagePig" instance=ExtResource("2_hitbox")]
 collision_layer = 0
@@ -62,4 +62,5 @@ collision_mask = 8
 damage = 10.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="DamagePig/HitboxComponent"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 shape = SubResource("BoxShape3D_2")
