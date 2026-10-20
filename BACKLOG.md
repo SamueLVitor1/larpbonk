@@ -1,4 +1,4 @@
-# Backlog — Tung Tung Sahur Adventures
+# Backlog — Larpbonk
 
 Ideias para depois do roadmap principal (ver `CLAUDE.md`). Não é ordem de prioridade.
 Ao implementar uma, marcar no Roadmap do `CLAUDE.md` e apagar daqui.
