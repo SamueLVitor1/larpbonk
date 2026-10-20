@@ -65,7 +65,10 @@ func release(node: Node) -> void:
 ## Devolve um objeto para o pool de onde ele veio; se não veio de um pool, apaga.
 ## Assim quem chama não precisa saber se o objeto é reaproveitado ou não.
 static func release_or_free(node: Node) -> void:
-	var pool := node.get_meta(&"object_pool", null) as ObjectPool
+	# has_meta antes: get_meta com padrão null ainda acusa erro se a chave não existe.
+	var pool: ObjectPool = null
+	if node.has_meta(&"object_pool"):
+		pool = node.get_meta(&"object_pool") as ObjectPool
 	if pool:
 		pool.release(node)
 	else:

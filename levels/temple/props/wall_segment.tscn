@@ -1,0 +1,37 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://levels/temple/materials/stone.tres" id="1_stone"]
+[ext_resource type="Material" path="res://levels/temple/materials/stone_dark.tres" id="2_dark"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_body"]
+material = ExtResource("1_stone")
+size = Vector3(8, 3, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_base"]
+material = ExtResource("2_dark")
+size = Vector3(8.02, 0.4, 1.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_roof"]
+material = ExtResource("2_dark")
+size = Vector3(8.4, 0.3, 1.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(8, 3.3, 1.6)
+
+[node name="WallSegment" type="StaticBody3D"]
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+mesh = SubResource("BoxMesh_body")
+
+[node name="Base" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+mesh = SubResource("BoxMesh_base")
+
+[node name="Roof" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.15, 0)
+mesh = SubResource("BoxMesh_roof")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.65, 0)
+shape = SubResource("BoxShape3D_1")

@@ -6,8 +6,12 @@ extends Node3D
 @export var enemy_scene: PackedScene
 ## Números de balanceamento (data/spawner/*.tres).
 @export var config: SpawnerConfig
-## Quantos ângulos sortear procurando um ponto fora da câmera.
-@export var offscreen_attempts: int = 10
+## Área do chão (X/Z) onde inimigos podem nascer. Cada mapa fechado define a
+## sua no nó herdado da base_level; tamanho zero = sem limite.
+@export var spawn_bounds: Rect2 = Rect2()
+## Quantos ângulos sortear procurando um ponto válido (fora da câmera e dentro
+## do mapa). No canto de um mapa fechado boa parte dos pontos cai fora.
+@export var offscreen_attempts: int = 20
 ## Inimigos criados já no começo, guardados na reserva.
 @export var pool_initial_size: int = 50
 
@@ -69,11 +73,16 @@ func _spawn_enemy() -> void:
 
 ## Sorteia pontos no círculo em volta do player até achar um que a câmera não vê.
 ## Com câmera em 3ª pessoa, na prática eles nascem atrás e dos lados.
+## Pontos fora do mapa são descartados (e não empurrados para dentro), para o
+## inimigo continuar nascendo longe do player e fora da câmera.
 func _find_offscreen_position(center: Vector3) -> Variant:
 	var camera := get_viewport().get_camera_3d()
+	var bounded := spawn_bounds.has_area()
 	for i in offscreen_attempts:
 		var angle := randf() * TAU
 		var point := Vector3(center.x + cos(angle) * config.spawn_radius, 0.0, center.z + sin(angle) * config.spawn_radius)
+		if bounded and not spawn_bounds.has_point(Vector2(point.x, point.z)):
+			continue
 		# Testa o meio do corpo, não o pé, para não aparecer metade do porco.
 		if camera == null or not camera.is_position_in_frustum(point + Vector3.UP * 0.5):
 			return point

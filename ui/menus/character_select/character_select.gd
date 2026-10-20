@@ -9,7 +9,7 @@ extends Control
 @export var slot_size := Vector2(140, 170)
 ## Graus por segundo da vitrine girando.
 @export var spin_speed: float = 30.0
-@export_file("*.tscn") var game_scene: String = "res://levels/test_arena/test_arena.tscn"
+@export_file("*.tscn") var game_scene: String = "res://levels/temple/temple.tscn"
 @export_file("*.tscn") var main_menu_scene: String = "res://ui/menus/main_menu/main_menu.tscn"
 
 var _selected: CharacterData

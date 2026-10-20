@@ -16,7 +16,7 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 | `components/` | Nós reutilizáveis por composição: `health_component/`, `hurtbox_component/` (recebe dano), `hitbox_component/` (causa dano) |
 | `data/` | Resources `.tres` com números do jogo (vida, dano, velocidade); sem código |
 | `effects/` | Efeitos visuais (partículas), ex.: `death_puff/` |
-| `levels/` | Mapas: `base_level/` (sistemas comuns) + um subdiretório por mapa (`test_arena/` para protótipo) |
+| `levels/` | Mapas: `base_level/` (sistemas comuns) + um subdiretório por mapa com `props/` e `materials/` próprios (`temple/`; `test_arena/` para protótipo/estresse) |
 | `ui/` | `hud/` e `menus/` |
 | `autoload/` | Singletons globais — manter o mínimo: `EventBus` (sinais) e `GameManager` (estado entre cenas) |
 
@@ -29,7 +29,7 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - Preferir composição (componentes) a hierarquias de herança profundas.
 - Status/balanceamento ficam em `data/` (Resources `.tres`), não hardcoded em scripts. O script que define o Resource fica junto da entidade (ex.: `base_enemy/enemy_stats.gd` → `data/enemies/pig.tres`).
 - Cada inimigo é uma **cena herdada** de `base_enemy.tscn` (base + modelo em `Model` + seu `.tres`), ex.: `enemies/pig/pig.tscn`. Não pendurar nós dentro de cenas instanciadas direto no level: o Godot descarta ao salvar.
-- Cada mapa é uma **cena herdada** de `levels/base_level/base_level.tscn` (player, spawners, HUD, menus, debug) e só acrescenta o cenário (`WorldEnvironment`, luz, chão, obstáculos). Sistema novo comum a todos os mapas entra na base.
+- Cada mapa é uma **cena herdada** de `levels/base_level/base_level.tscn` (player, spawners, HUD, menus, debug) e só acrescenta o cenário (`WorldEnvironment`, luz, chão, obstáculos). Sistema novo comum a todos os mapas entra na base. Mapa fechado define `spawn_bounds` (área X/Z) no `EnemySpawner` herdado; tamanho zero = sem limite.
 - Modelos `.glb`: uma malha só, transforms aplicados, origem embaixo no centro (onde "pisa").
 - Comunicação entre sistemas desacoplados via sinais do `event_bus`.
 - `.gitkeep` mantém pastas vazias no Git; pode remover quando a pasta tiver arquivos.
@@ -114,16 +114,16 @@ Feito em passos pequenos, cada um testado no jogo antes do próximo (e um commit
   - [x] 10.2 Tela `ui/menus/character_select/`: quadradinhos (+2 com cadeado) e vitrine 3D girando com nome/descrição
   - [x] 10.3 `GameManager` (autoload) guarda `selected_character`. **O player ainda não lê** (só existe o Gojo); ao criar o 2º personagem, o player deve trocar modelo/arma a partir dele
 
-- [ ] **11. Mapas**
+- [x] **11. Mapas**
   - [x] 11.1 `BaseLevel` (`levels/base_level/`) com os sistemas comuns; `test_arena` vira cena herdada só com o cenário
-  - [ ] 11.2 Primeiro mapa de verdade
+  - [x] 11.2 Templo (`levels/temple/`): pátio 80×80 fechado por muro, peças reutilizáveis em `props/` (muro, pilar, lanterna, torii) com colisão para o player; `EnemySpawner.spawn_bounds` impede porcos fora do mapa. A seleção de personagem abre o templo. **Inimigos e balas ainda atravessam obstáculos** (sem física)
 
 **Depois:** escolher itens do [BACKLOG.md](BACKLOG.md) (ex.: separação entre inimigos, mais inimigos, mais armas, menu principal).
 
 ### Lembretes para continuar
 - Mudou `project.godot` (autoload, layers)? **Projeto → Recarregar Projeto Atual** no Godot.
 - Se o Godot perguntar para recarregar uma cena alterada fora dele, escolha **recarregar** (não salvar por cima).
-- ▶️ abre o menu principal; para testar direto a arena, abra `test_arena.tscn` e use **Rodar cena atual** (Cmd+R / F6).
+- ▶️ abre o menu principal (→ templo); para testar direto um mapa, abra `temple.tscn` ou `test_arena.tscn` e use **Rodar cena atual** (Cmd+R / F6).
 - Testes rápidos: **K** mata todos; overlay mostra FPS/inimigos; para estresse, Config do spawner → `stress_spawn.tres`.
 
 ## Ideias futuras

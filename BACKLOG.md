@@ -32,6 +32,7 @@ Ao implementar uma, marcar no Roadmap do `CLAUDE.md` e apagar daqui.
 
 ## 🌊 Spawner e horda
 - **Ondas em grupos:** às vezes solta vários juntos (grupinho / círculo fechando em volta).
+- **Inimigos desviando de obstáculos:** hoje atravessam pilares/lanternas do templo (andam sem física). Opções baratas: empurrar para fora de círculos conhecidos dos obstáculos, ou flow field no mapa.
 - **Inimigos se afastando uns dos outros:** hoje viram um "bolo"; separação simples por código (sem física). Repetir o teste de estresse depois.
 
 ## 🎁 Coletáveis
@@ -46,8 +47,9 @@ Ao implementar uma, marcar no Roadmap do `CLAUDE.md` e apagar daqui.
 - **Nível máximo por upgrade** (ex.: "Força 3/5") e upgrades que exigem outro antes.
 
 ## 🗺️ Estrutura e meta
+- **Seleção de mapa** (hoje a seleção de personagem abre sempre o templo).
+- **Mais mapas:** floresta, deserto… (cena herdada de `base_level` + `props/` próprios).
 - 🏆 **Recorde salvo** ("Seu melhor: 07:32").
-- 🗺️ **Mapa com obstáculos** (árvores, pedras).
 - 💰 **Moedas entre partidas** para melhorias permanentes (estilo Megabonk).
 - 🎯 **Partida com objetivo:** sobreviver 10 min e enfrentar o chefão final.
 - **Exportar** para macOS (app não assinado → clique direito → Abrir) e Windows.
