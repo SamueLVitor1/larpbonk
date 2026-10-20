@@ -65,6 +65,7 @@ func _apply_stats() -> void:
 
 
 func _on_died() -> void:
+	EventBus.enemy_died.emit(global_position, stats.xp_value if stats else 0.0)
 	# Deferred: a morte acontece no meio da checagem de colisão da hitbox,
 	# e desligar áreas de colisão nesse momento dá erro no Godot.
 	_despawn.call_deferred()

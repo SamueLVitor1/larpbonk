@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://systems/drops/drop_spawner.gd" id="1_drops"]
+[ext_resource type="PackedScene" path="res://entities/pickups/xp_gem/xp_gem.tscn" id="2_gem"]
+
+[node name="DropSpawner" type="Node"]
+script = ExtResource("1_drops")
+gem_scene = ExtResource("2_gem")

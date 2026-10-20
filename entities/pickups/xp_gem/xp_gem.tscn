@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://entities/pickups/xp_gem/xp_gem.gd" id="1_gem"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_green"]
+shading_mode = 0
+albedo_color = Color(0.3, 1, 0.45, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1"]
+material = SubResource("StandardMaterial3D_green")
+size = Vector3(0.22, 0.22, 0.22)
+
+[node name="XpGem" type="Node3D"]
+script = ExtResource("1_gem")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.707107, -0.5, 0.5, 0.707107, 0.5, -0.5, 0, 0.707107, 0.707107, 0, 0.3, 0)
+cast_shadow = 0
+mesh = SubResource("BoxMesh_1")
