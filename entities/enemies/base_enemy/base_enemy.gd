@@ -5,6 +5,11 @@ extends Node3D
 ## Os números vêm de um EnemyStats (.tres em data/enemies/).
 
 @export var stats: EnemyStats
+## Para de andar quando está mais perto que isso (evita tremer em cima do player).
+@export var stop_distance: float = 0.5
+
+var target: Node3D
+var _move_speed: float = 3.0
 
 @onready var health: HealthComponent = $HealthComponent
 @onready var hitbox: HitboxComponent = $HitboxComponent
@@ -13,6 +18,23 @@ extends Node3D
 func _ready() -> void:
 	_apply_stats()
 	health.died.connect(_on_died)
+
+
+## Anda reto até o player, só no plano XZ, e vira o corpo para ele.
+## O modelo olha para +Z, por isso atan2(x, z).
+func _physics_process(delta: float) -> void:
+	if target == null:
+		# Busca "preguiçosa": não depende da ordem em que player e inimigo entram na cena.
+		target = get_tree().get_first_node_in_group("player") as Node3D
+		if target == null:
+			return
+	var to_target := target.global_position - global_position
+	to_target.y = 0.0
+	if to_target.length() <= stop_distance:
+		return
+	var direction := to_target.normalized()
+	global_position += direction * _move_speed * delta
+	rotation.y = atan2(direction.x, direction.z)
 
 
 ## Passa os números do .tres para os componentes. Os filhos rodam _ready()
@@ -24,6 +46,7 @@ func _apply_stats() -> void:
 	health.max_health = stats.max_health
 	health.reset()
 	hitbox.damage = stats.contact_damage
+	_move_speed = stats.move_speed
 
 
 func _on_died() -> void:

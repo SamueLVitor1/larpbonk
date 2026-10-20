@@ -18,6 +18,8 @@ var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 
 func _ready() -> void:
+	# Inimigos encontram o player por este grupo.
+	add_to_group("player")
 	health.damaged.connect(_on_damaged)
 	health.died.connect(_on_died)
 

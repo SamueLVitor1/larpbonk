@@ -26,10 +26,22 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - Cena e script com o mesmo nome, na mesma pasta (`player.tscn` + `player.gd`).
 - Sempre caminhos `res://`, nunca absolutos.
 - Preferir composição (componentes) a hierarquias de herança profundas.
-- Status/balanceamento ficam em `data/` (Resources), não hardcoded em scripts.
+- Status/balanceamento ficam em `data/` (Resources `.tres`), não hardcoded em scripts. O script que define o Resource fica junto da entidade (ex.: `base_enemy/enemy_stats.gd` → `data/enemies/pig.tres`).
+- Cada inimigo é uma **cena herdada** de `base_enemy.tscn` (base + modelo em `Model` + seu `.tres`), ex.: `enemies/pig/pig.tscn`. Não pendurar nós dentro de cenas instanciadas direto no level: o Godot descarta ao salvar.
+- Modelos `.glb`: uma malha só, transforms aplicados, origem embaixo no centro (onde "pisa").
 - Comunicação entre sistemas desacoplados via sinais do `event_bus`.
 - `.gitkeep` mantém pastas vazias no Git; pode remover quando a pasta tiver arquivos.
 - `.godot/` é cache local e fica fora do Git.
+
+## Camadas de colisão (3D)
+
+| Layer | Nome | Uso |
+|---|---|---|
+| 1 | `world` | Chão, paredes |
+| 2 | `player` | Corpo do player |
+| 3 | `enemies` | Corpo dos inimigos |
+| 4 | `player_hurtbox` | Hurtbox do player (mask das hitboxes de inimigos) |
+| 5 | `enemy_hurtbox` | Hurtbox dos inimigos (mask das hitboxes de projéteis) |
 
 ## Performance (crítico para survivors-like)
 
