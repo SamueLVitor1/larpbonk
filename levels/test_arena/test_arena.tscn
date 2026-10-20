@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://ui/hud/hud.tscn" id="6_hud"]
 [ext_resource type="PackedScene" path="res://ui/menus/level_up_menu/level_up_menu.tscn" id="7_level_up_menu"]
 [ext_resource type="PackedScene" path="res://systems/upgrades/upgrade_manager.tscn" id="8_upgrade_manager"]
+[ext_resource type="PackedScene" path="res://ui/menus/game_over_menu/game_over_menu.tscn" id="9_game_over"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
 
@@ -68,3 +69,5 @@ config = ExtResource("4_spawn_config")
 [node name="UpgradeManager" parent="." instance=ExtResource("8_upgrade_manager")]
 
 [node name="LevelUpMenu" parent="." instance=ExtResource("7_level_up_menu")]
+
+[node name="GameOverMenu" parent="." instance=ExtResource("9_game_over")]

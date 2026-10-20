@@ -90,14 +90,14 @@ Feito em passos pequenos, cada um testado no jogo antes do próximo (e um commit
   - [x] 6.2 Ímã e coleta (`pickup_radius` no player)
   - [x] 6.3 `ExperienceComponent` + `data/player/experience.tres` + HUD com barra de XP e nível
   - [x] 6.4 Tela de level up: 3 cartas (`UpgradeData` em `data/upgrades/`, `UpgradeManager`, `LevelUpMenu`)
-- [ ] **7. HUD e game over** ← *próximo*
+- [x] **7. HUD e game over**
   - [x] 7.1 Barra de vida do player na HUD (via `EventBus`)
   - [x] 7.2 Cronômetro da partida na HUD
-  - [ ] 7.3 Game over: ao morrer, pausa e mostra tela com tempo sobrevivido e nível
-  - [ ] 7.4 Botão "Jogar de novo" (recarrega a cena) e talvez "Sair"
-  - [ ] 7.5 Revisar o `game_manager` (autoload) — só se precisar de estado global da partida
+  - [x] 7.3 Game over: ao morrer, pausa e mostra tela com tempo sobrevivido e nível (`GameOverMenu`)
+  - [x] 7.4 Botão "Jogar de novo" (recarrega a cena). "Sair" fica para quando houver menu principal
+  - [x] 7.5 `game_manager`: **não precisou** — o estado da partida vive nos sistemas e conversa pelo `EventBus`; recarregar a cena zera tudo
 
-Depois do 7: escolher itens do backlog abaixo (ex.: separação entre inimigos, mais inimigos, mais armas).
+**Próximo:** escolher itens do backlog abaixo (ex.: separação entre inimigos, mais inimigos, mais armas, menu principal).
 
 ### Lembretes para continuar
 - Mudou `project.godot` (autoload, layers)? **Projeto → Recarregar Projeto Atual** no Godot.

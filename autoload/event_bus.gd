@@ -34,3 +34,7 @@ signal player_health_changed(current: float, max_value: float)
 ## Tempo da partida, avisado uma vez por segundo (pausa não conta).
 @warning_ignore("unused_signal")
 signal run_time_changed(seconds: int)
+
+## A vida do player chegou a zero.
+@warning_ignore("unused_signal")
+signal player_died

@@ -75,5 +75,5 @@ func _play(anim_name: String) -> void:
 
 
 func _on_died() -> void:
-	# Por enquanto só avisa; o game over de verdade vem no passo 7 (HUD).
-	print("Player morreu!")
+	# Quem mostra o game over escuta pelo EventBus.
+	EventBus.player_died.emit()
