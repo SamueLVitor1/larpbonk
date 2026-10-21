@@ -16,6 +16,11 @@ extends Node3D
 @export var body_radius: float = 0.5
 ## Velocidade máxima (m/s) do empurrão para longe dos vizinhos (HordeSeparation).
 @export var separation_speed: float = 2.5
+## Sombra do sol. Desligada nos inimigos de horda: cada sombra redesenha o
+## inimigo em todas as camadas (cascatas) do sol; com centenas na tela, isso
+## pesava mais que todo o resto (65 ms/frame com o jogo pausado, só desenho).
+## Ligada em quem é único, como chefes.
+@export var cast_shadows: bool = false
 
 ## Um material só, compartilhado por todos os inimigos: piscar é só ligar/desligar
 ## o overlay em cada malha, sem criar nada novo a cada acerto.
@@ -39,6 +44,7 @@ func _ready() -> void:
 	# Busca as malhas uma vez só (o modelo do .glb pode ter várias).
 	for node in $Model.find_children("*", "MeshInstance3D", true, false):
 		_meshes.append(node)
+		node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if cast_shadows else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	# Vindo de um pool, só entra no grupo ao sair da reserva (on_pool_acquire);
 	# senão os guardados contariam no limite do spawner e na tecla K.
 	if not has_meta(&"object_pool"):
