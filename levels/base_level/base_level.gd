@@ -30,7 +30,12 @@ func _process(_delta: float) -> void:
 		_debug_label.text = "FPS: %d\nInimigos: %d" % [
 			Engine.get_frames_per_second(),
 			get_tree().get_nodes_in_group("enemies").size(),
-		]
+		] + ("\nIMORTAL" if _player_invincible() else "")
+
+
+func _player_invincible() -> bool:
+	var player := get_tree().get_first_node_in_group("player") as Player
+	return player != null and player.health.invincible
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -38,6 +43,16 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_K:
 		_kill_all_enemies()
+	elif event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_I:
+		_toggle_invincible()
+
+
+func _toggle_invincible() -> void:
+	var player := get_tree().get_first_node_in_group("player") as Player
+	if player == null:
+		return
+	player.health.invincible = not player.health.invincible
+	print("[debug] imortal: %s" % ("LIGADO" if player.health.invincible else "desligado"))
 
 
 ## Mata pelo HealthComponent (em vez de apagar direto), para testar o mesmo

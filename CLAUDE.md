@@ -47,7 +47,7 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - **`HitboxComponent.hit_once`:** ligado = um acerto e para (bala, `reset()` ao reutilizar); desligado = dano contínuo (contato do inimigo, limitado pela invulnerabilidade do alvo).
 - **Relevo (`HeightTerrain`, `@tool`):** ruído + `TerrainArea` (plano/platô/rampa/lago) → malha low-poly, colisão do player e grade de alturas. Quem não usa física (inimigos, spawner, gemas) pergunta `HeightTerrain.ground_height(x, z)`; sem terreno = 0. Mudou algo e não atualizou no editor → botão **Regerar terreno** no Inspetor.
 - **`TerrainScatter`** (filho do terreno): espalha uma cena (com colisão) ou uma malha (`MultiMesh`, ex.: grama) com semente fixa; as cópias não ficam salvas no `.tscn`.
-- **Debug** (só no editor, em `base_level.gd`, vale para todo mapa): tecla **K** mata todos os inimigos; **G** mostra a grade de obstáculos; **F** mostra as setinhas do campo de fluxo; overlay com FPS e nº de inimigos. Para estresse, trocar o Config do spawner por `data/spawner/stress_spawn.tres`.
+- **Debug** (só no editor, em `base_level.gd`, vale para todo mapa): tecla **K** mata todos os inimigos; **G** mostra a grade de obstáculos; **F** mostra as setinhas do campo de fluxo; **I** liga/desliga o player imortal; overlay com FPS e nº de inimigos. Para estresse, trocar o Config do spawner por `data/spawner/stress_spawn.tres`.
 
 ## Camadas de colisão (3D)
 

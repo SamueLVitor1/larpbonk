@@ -12,6 +12,8 @@ signal died
 @export var invulnerability_time: float = 0.0
 
 var current_health: float
+## Ignora todo dano (debug: tecla I na BaseLevel, para testes de estresse).
+var invincible := false
 var is_dead := false
 
 var _invulnerable_until: float = 0.0
@@ -22,7 +24,7 @@ func _ready() -> void:
 
 
 func take_damage(amount: float) -> void:
-	if is_dead or amount <= 0.0 or is_invulnerable():
+	if is_dead or invincible or amount <= 0.0 or is_invulnerable():
 		return
 	current_health = maxf(current_health - amount, 0.0)
 	_invulnerable_until = _now() + invulnerability_time

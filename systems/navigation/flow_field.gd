@@ -22,6 +22,8 @@ static var active: FlowField
 @export var radius: float = 40.0
 ## Segundos entre recálculos (o player anda pouco nesse tempo).
 @export var update_interval: float = 0.25
+## Player numa célula bloqueada: até quantas células em volta procurar chão livre.
+@export var max_start_ring: int = 6
 
 const UNREACHED := -1
 const NEIGHBORS: Array[Vector2i] = [
@@ -101,10 +103,13 @@ func _rebuild(target: Vector3) -> void:
 	queue.resize(total)
 	var head := 0
 	var tail := 0
-	var start := cells * _size + cells
-	_distance[start] = 0
-	queue[tail] = start
-	tail += 1
+	# Ponto de partida: a célula do player. Se ela estiver bloqueada (player em
+	# cima de muro, colado num pilar), parte das células livres mais próximas;
+	# senão a busca não sai do lugar e a horda toda se amontoa num ponto só.
+	for start in _start_cells(cells):
+		_distance[start] = 0
+		queue[tail] = start
+		tail += 1
 	while head < tail:
 		var index := queue[head]
 		head += 1
@@ -148,6 +153,27 @@ func _rebuild(target: Vector3) -> void:
 			best_offset = offset
 		if best_offset != Vector2i.ZERO:
 			_direction[index] = Vector2(best_offset).normalized()
+
+
+## Índices de onde a BFS começa: a célula central, ou o anel de células livres
+## mais próximo dela (até `max_start_ring` células de distância).
+func _start_cells(cells: int) -> PackedInt32Array:
+	var result := PackedInt32Array()
+	if not _blocked(_origin + Vector2i(cells, cells)):
+		result.append(cells * _size + cells)
+		return result
+	for ring in range(1, max_start_ring + 1):
+		for dx in range(-ring, ring + 1):
+			for dy in range(-ring, ring + 1):
+				if maxi(absi(dx), absi(dy)) != ring:
+					continue  # só a borda do anel
+				var local := Vector2i(cells + dx, cells + dy)
+				if not _blocked(_origin + local):
+					result.append(local.y * _size + local.x)
+		if not result.is_empty():
+			return result
+	result.append(cells * _size + cells)  # cercado de bloqueio: parte do centro mesmo
+	return result
 
 
 func _unhandled_input(event: InputEvent) -> void:

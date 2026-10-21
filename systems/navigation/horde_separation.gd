@@ -15,6 +15,10 @@ extends Node
 ## Tamanho da célula do hash. Precisa ser ≥ maior soma de raios que importa
 ## (porco + Porco Rei ≈ 1,9 m), senão vizinhos sobrepostos escapam da busca.
 @export var cell_size: float = 2.0
+## Teto de vizinhos comparados por inimigo. Sem ele, uma horda espremida num
+## canto vira centenas × centenas de comparações por frame (caiu para 4 FPS
+## com 500 porcos no pé de um muro). Com o teto, o custo fica fixo.
+@export var max_neighbor_checks: int = 16
 
 var _frame := 0
 
@@ -50,12 +54,16 @@ func _push_for(enemy: BaseEnemy, cells: Dictionary) -> Vector3:
 	var push := Vector3.ZERO
 	var position := enemy.global_position
 	var key := _cell_of(position)
+	var checks := 0
 	for dx in range(-1, 2):
 		for dz in range(-1, 2):
 			var neighbors: Array = cells.get(key + Vector2i(dx, dz), [])
 			for other: BaseEnemy in neighbors:
 				if other == enemy:
 					continue
+				checks += 1
+				if checks > max_neighbor_checks:
+					return push.limit_length(1.0)
 				var away := position - other.global_position
 				away.y = 0.0
 				var min_distance := enemy.body_radius + other.body_radius
