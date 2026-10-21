@@ -12,3 +12,6 @@ extends Resource
 @export var projectile_speed: float = 20.0
 ## Segundos até a bala sumir se não acertar nada.
 @export var projectile_lifetime: float = 2.0
+## Bala some ao bater em muro/pilar/árvore (ObstacleGrid). Desligado = atravessa:
+## com mira automática, perder tiro na parede frustra (a orb azul atravessa).
+@export var stopped_by_obstacles: bool = false

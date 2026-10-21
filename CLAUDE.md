@@ -141,7 +141,7 @@ Feito em passos pequenos, cada um testado no jogo antes do próximo (e um commit
   - [x] 14.1 `ObstacleGrid` (`systems/navigation/`, na `BaseLevel`): obstáculos (`StaticBody3D` menos o terreno) viram células bloqueadas ao montar o mapa; `ObstacleGrid.is_blocked(x, z)`; tecla **G** (debug) mostra as células
   - [x] 14.2 Inimigo desliza na parede (`BaseEnemy.body_radius`; tenta direto, só X, só Z)
   - [x] 14.3 Spawner (e `BossSpawner`, que usa a mesma função) não solta inimigo em célula bloqueada
-  - [ ] 14.4 Balas param nos obstáculos
+  - [x] 14.4 Balas e obstáculos: **por arma** (`WeaponStats.stopped_by_obstacles`). A orb azul **atravessa** de propósito (mira automática + parar no muro = tiro perdido e frustração); armas futuras (flecha, pedra) podem parar. Checagem em `Projectile._hit_obstacle`, pela grade
   - [ ] 14.5 Separação entre inimigos (grade de vizinhança por frame)
   - [ ] 14.6 Teste de estresse de novo
   - [x] 14.7 `FlowField` (`systems/navigation/`, na `BaseLevel`): BFS a partir do player a cada 0,25 s numa janela de 40 m; inimigo segue a setinha da célula (`FlowField.direction_at`) e o `_slide` continua como segurança; tecla **F** (debug) mostra as setinhas

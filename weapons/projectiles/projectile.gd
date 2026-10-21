@@ -6,9 +6,14 @@ extends Node3D
 @export var speed: float = 20.0
 ## Segundos até sumir se não acertar nada.
 @export var lifetime: float = 2.0
+## Some ao bater em obstáculos (vem do WeaponStats a cada tiro).
+@export var stopped_by_obstacles: bool = false
 
 var direction := Vector3.FORWARD
 var _time_left: float = 0.0
+## Só "arma" a checagem de muro depois de passar por uma célula livre: o player
+## colado num pilar está numa célula bloqueada, e a bala sumiria ao nascer.
+var _armed := false
 
 @onready var hitbox: HitboxComponent = $HitboxComponent
 
@@ -25,9 +30,11 @@ func launch(from: Vector3, toward: Vector3, stats: WeaponStats = null, only_targ
 		speed = stats.projectile_speed
 		lifetime = stats.projectile_lifetime
 		hitbox.damage = stats.damage
+		stopped_by_obstacles = stats.stopped_by_obstacles
 	global_position = from
 	direction = toward.normalized()
 	_time_left = lifetime
+	_armed = false
 	hitbox.only_target = only_target
 	hitbox.reset()
 
@@ -35,8 +42,24 @@ func launch(from: Vector3, toward: Vector3, stats: WeaponStats = null, only_targ
 func _physics_process(delta: float) -> void:
 	global_position += direction * speed * delta
 	_time_left -= delta
-	if _time_left <= 0.0:
+	if _time_left <= 0.0 or _hit_obstacle():
 		_despawn()
+
+
+## Bateu em muro/pilar/árvore? Usa a grade do ObstacleGrid (sem física) e só
+## conta na faixa de altura que bloqueia (passa por cima de obstáculos baixos
+## e por baixo da viga do torii, igual aos inimigos).
+func _hit_obstacle() -> bool:
+	if not stopped_by_obstacles:
+		return false
+	var blocked := ObstacleGrid.is_blocked(global_position.x, global_position.z)
+	if not _armed:
+		_armed = not blocked
+		return false
+	if not blocked:
+		return false
+	var height := global_position.y - HeightTerrain.ground_height(global_position.x, global_position.z)
+	return height <= ObstacleGrid.active.probe_top
 
 
 ## Acertou: some. Deferred porque o acerto acontece no meio da checagem de
