@@ -102,7 +102,7 @@ Feito em passos pequenos, cada um testado no jogo antes do próximo (e um commit
   - [x] 7.2 Cronômetro da partida na HUD
   - [x] 7.3 Game over: ao morrer, pausa e mostra tela com tempo sobrevivido e nível (`GameOverMenu`)
   - [x] 7.4 Botão "Jogar de novo" (recarrega a cena)
-  - [x] 7.5 `game_manager`: **não precisou** — o estado da partida vive nos sistemas e conversa pelo `EventBus`; recarregar a cena zera tudo
+  - [x] 7.5 `game_manager`: não precisou aqui (o estado da partida vive nos sistemas e conversa pelo `EventBus`; recarregar a cena zera tudo). Criado depois, no passo 10, só para o estado entre cenas
 
 - [x] **8. Game feel**
   - [x] 8.1 Inimigo pisca branco ao tomar dano (`material_overlay`)
@@ -121,7 +121,7 @@ Feito em passos pequenos, cada um testado no jogo antes do próximo (e um commit
 
 - [x] **11. Mapas**
   - [x] 11.1 `BaseLevel` (`levels/base_level/`) com os sistemas comuns; `test_arena` vira cena herdada só com o cenário
-  - [x] 11.2 Templo (`levels/temple/`): pátio 80×80 fechado por muro, peças reutilizáveis em `props/` (muro, pilar, lanterna, torii) com colisão para o player; `EnemySpawner.spawn_bounds` impede porcos fora do mapa. A seleção de personagem abre o templo. **Inimigos e balas ainda atravessam obstáculos** (sem física)
+  - [x] 11.2 Templo (`levels/temple/`): pátio 80×80 fechado por muro, peças reutilizáveis em `props/` (muro, pilar, lanterna, torii) com colisão para o player; `EnemySpawner.spawn_areas` impede porcos fora do mapa. A seleção de personagem abre o templo. **Inimigos e balas ainda atravessam obstáculos** (sem física)
   - [x] 11.3 Relevo: `HeightTerrain` + `TerrainArea` (`systems/terrain/`); inimigos, spawner e gemas seguem a altura do chão
   - [x] 11.4 Jardim ao norte do templo (160×120): morros, platô de 10 m com rampa, cachoeira (`props/waterfall.tscn` + `assets/shaders/water.gdshader`), lago raso, vegetação via `TerrainScatter`, sebe + paredes invisíveis na borda. `spawn_areas` com 2 retângulos (templo + jardim)
 
@@ -137,7 +137,7 @@ Feito em passos pequenos, cada um testado no jogo antes do próximo (e um commit
   - [x] 13.4 Tela de carregamento (`SceneLoader` + `ui/loading_screen/`): tira a travadinha ao entrar no mapa, recomeçar e jogar de novo
   - [x] 13.5 Pausa, game over e seleção de personagem no estilo NES (`MenuCursor` reutilizável)
 
-**Depois:** escolher itens do [BACKLOG.md](BACKLOG.md) (ex.: separação entre inimigos, mais inimigos, mais armas, menu principal).
+**Depois:** escolher itens do [BACKLOG.md](BACKLOG.md) (ex.: separação entre inimigos, inimigos/balas colidindo com obstáculos, mais inimigos, mais armas, sons).
 
 ### Lembretes para continuar
 - Mudou `project.godot` (autoload, layers)? **Projeto → Recarregar Projeto Atual** no Godot.

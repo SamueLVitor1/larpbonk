@@ -51,8 +51,11 @@ func change_scene(path: String) -> void:
 		_busy = false
 		return
 
-	get_tree().paused = false
+	# A troca só acontece no fim do frame: despausar antes deixaria a cena antiga
+	# rodar 1 frame (o player podia morrer e o game over pausaria a cena nova).
 	get_tree().change_scene_to_packed(scene)
+	await get_tree().process_frame
+	get_tree().paused = false
 	for i in settle_frames:
 		await get_tree().process_frame
 	var remaining := min_duration - (Time.get_ticks_msec() - started) / 1000.0
