@@ -11,6 +11,9 @@ extends Node3D
 @export var hit_flash_duration: float = 0.08
 ## Altura do meio do corpo (em relação ao pé): para onde as balas e a mira travada apontam.
 @export var aim_height: float = 0.45
+## Raio do corpo no chão: olha esse tanto à frente para não enfiar o focinho no
+## muro (ObstacleGrid). Porco ~0,5; chefes maiores.
+@export var body_radius: float = 0.5
 
 ## Um material só, compartilhado por todos os inimigos: piscar é só ligar/desligar
 ## o overlay em cada malha, sem criar nada novo a cada acerto.
@@ -69,10 +72,35 @@ func _physics_process(delta: float) -> void:
 	if to_target.length() <= stop_distance:
 		return
 	var direction := to_target.normalized()
-	var next := global_position + direction * _move_speed * delta
+	var step := _slide(direction * _move_speed * delta)
+	# Vira para o player mesmo parado num canto: fica "encarando" atrás do muro.
+	rotation.y = atan2(direction.x, direction.z)
+	if step == Vector3.ZERO:
+		return
+	var next := global_position + step
 	next.y = HeightTerrain.ground_height(next.x, next.z)
 	global_position = next
-	rotation.y = atan2(direction.x, direction.z)
+
+
+## Desvia de obstáculos sem física: tenta o passo direto; se bater, tenta só no
+## X ou só no Z (na velocidade cheia), o que faz o inimigo escorregar ao longo
+## do muro. Encurralado nos dois = fica parado neste frame em vez de atravessar.
+func _slide(step: Vector3) -> Vector3:
+	# Já está numa célula bloqueada (nasceu ou foi empurrado para dentro): deixa sair.
+	if ObstacleGrid.is_blocked(global_position.x, global_position.z):
+		return step
+	var length := step.length()
+	for candidate: Vector3 in [
+		step,
+		Vector3(signf(step.x) * length, 0.0, 0.0),
+		Vector3(0.0, 0.0, signf(step.z) * length),
+	]:
+		if candidate == Vector3.ZERO:
+			continue
+		var ahead := global_position + candidate + candidate.normalized() * body_radius
+		if not ObstacleGrid.is_blocked(ahead.x, ahead.z):
+			return candidate
+	return Vector3.ZERO
 
 
 ## Passa os números do .tres para os componentes. Os filhos rodam _ready()

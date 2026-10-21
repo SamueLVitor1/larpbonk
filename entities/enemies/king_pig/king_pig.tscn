@@ -13,6 +13,7 @@ size = Vector3(2.85, 3.0, 2.85)
 [node name="KingPig" groups=["bosses"] instance=ExtResource("1_base")]
 stats = ExtResource("2_stats")
 aim_height = 1.75
+body_radius = 1.4
 
 [node name="KingPigModel" parent="Model" instance=ExtResource("3_model")]
 transform = Transform3D(2.3, 0, 0, 0, 2.3, 0, 0, 0, 2.3, 0, 0, 0)
