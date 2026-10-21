@@ -140,7 +140,7 @@ Feito em passos pequenos, cada um testado no jogo antes do próximo (e um commit
 - [ ] **14. Movimento da horda** ← *em andamento*
   - [x] 14.1 `ObstacleGrid` (`systems/navigation/`, na `BaseLevel`): obstáculos (`StaticBody3D` menos o terreno) viram células bloqueadas ao montar o mapa; `ObstacleGrid.is_blocked(x, z)`; tecla **G** (debug) mostra as células
   - [x] 14.2 Inimigo desliza na parede (`BaseEnemy.body_radius`; tenta direto, só X, só Z)
-  - [ ] 14.3 Spawner não solta inimigo em célula bloqueada
+  - [x] 14.3 Spawner (e `BossSpawner`, que usa a mesma função) não solta inimigo em célula bloqueada
   - [ ] 14.4 Balas param nos obstáculos
   - [ ] 14.5 Separação entre inimigos (grade de vizinhança por frame)
   - [ ] 14.6 Teste de estresse de novo

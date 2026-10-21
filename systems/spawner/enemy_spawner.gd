@@ -74,7 +74,7 @@ func _spawn_enemy() -> void:
 
 ## Sorteia pontos no círculo em volta do player até achar um que a câmera não vê.
 ## Com câmera em 3ª pessoa, na prática eles nascem atrás e dos lados.
-## Pontos fora do mapa são descartados (e não empurrados para dentro), para o
+## Pontos fora do mapa ou em obstáculos (ObstacleGrid) são descartados (e não empurrados para dentro), para o
 ## inimigo continuar nascendo longe do player e fora da câmera.
 ## Pública: o BossSpawner usa a mesma regra. Devolve null se não achar.
 func find_spawn_position(center: Vector3) -> Variant:
@@ -83,6 +83,9 @@ func find_spawn_position(center: Vector3) -> Variant:
 		var angle := randf() * TAU
 		var point := Vector3(center.x + cos(angle) * config.spawn_radius, 0.0, center.z + sin(angle) * config.spawn_radius)
 		if not _is_in_spawn_areas(Vector2(point.x, point.z)):
+			continue
+		# Nada de nascer dentro de pilar, árvore ou muro.
+		if ObstacleGrid.is_blocked(point.x, point.z):
 			continue
 		point.y = HeightTerrain.ground_height(point.x, point.z)
 		# Testa o meio do corpo, não o pé, para não aparecer metade do porco.
