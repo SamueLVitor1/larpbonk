@@ -47,7 +47,7 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - **`HitboxComponent.hit_once`:** ligado = um acerto e para (bala, `reset()` ao reutilizar); desligado = dano contínuo (contato do inimigo, limitado pela invulnerabilidade do alvo).
 - **Relevo (`HeightTerrain`, `@tool`):** ruído + `TerrainArea` (plano/platô/rampa/lago) → malha low-poly, colisão do player e grade de alturas. Quem não usa física (inimigos, spawner, gemas) pergunta `HeightTerrain.ground_height(x, z)`; sem terreno = 0. Mudou algo e não atualizou no editor → botão **Regerar terreno** no Inspetor.
 - **`TerrainScatter`** (filho do terreno): espalha uma cena (com colisão) ou uma malha (`MultiMesh`, ex.: grama) com semente fixa; as cópias não ficam salvas no `.tscn`.
-- **Debug** (só no editor, em `base_level.gd`, vale para todo mapa): tecla **K** mata todos os inimigos; **G** mostra a grade de obstáculos; overlay com FPS e nº de inimigos. Para estresse, trocar o Config do spawner por `data/spawner/stress_spawn.tres`.
+- **Debug** (só no editor, em `base_level.gd`, vale para todo mapa): tecla **K** mata todos os inimigos; **G** mostra a grade de obstáculos; **F** mostra as setinhas do campo de fluxo; overlay com FPS e nº de inimigos. Para estresse, trocar o Config do spawner por `data/spawner/stress_spawn.tres`.
 
 ## Camadas de colisão (3D)
 
@@ -144,7 +144,7 @@ Feito em passos pequenos, cada um testado no jogo antes do próximo (e um commit
   - [ ] 14.4 Balas param nos obstáculos
   - [ ] 14.5 Separação entre inimigos (grade de vizinhança por frame)
   - [ ] 14.6 Teste de estresse de novo
-  - [ ] 14.7 (se precisar) Campo de fluxo para dar a volta em muros
+  - [x] 14.7 `FlowField` (`systems/navigation/`, na `BaseLevel`): BFS a partir do player a cada 0,25 s numa janela de 40 m; inimigo segue a setinha da célula (`FlowField.direction_at`) e o `_slide` continua como segurança; tecla **F** (debug) mostra as setinhas
 
 **Depois:** escolher itens do [BACKLOG.md](BACKLOG.md) (ex.: separação entre inimigos, inimigos/balas colidindo com obstáculos, mais inimigos, mais armas, sons).
 

@@ -55,6 +55,10 @@ static func is_blocked(x: float, z: float) -> bool:
 	return active._blocked.has(active.cell_of(x, z))
 
 
+func is_cell_blocked(cell: Vector2i) -> bool:
+	return _blocked.has(cell)
+
+
 func cell_of(x: float, z: float) -> Vector2i:
 	return Vector2i(floori(x / cell_size), floori(z / cell_size))
 

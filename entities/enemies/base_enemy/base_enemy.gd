@@ -72,9 +72,10 @@ func _physics_process(delta: float) -> void:
 	if to_target.length() <= stop_distance:
 		return
 	var direction := to_target.normalized()
-	var step := _slide(direction * _move_speed * delta)
-	# Vira para o player mesmo parado num canto: fica "encarando" atrás do muro.
-	rotation.y = atan2(direction.x, direction.z)
+	# Setinha do campo de fluxo (dá a volta nos muros); sem campo, vai reto.
+	var path := FlowField.direction_at(global_position.x, global_position.z, direction)
+	var step := _slide(path * _move_speed * delta)
+	rotation.y = atan2(path.x, path.z)
 	if step == Vector3.ZERO:
 		return
 	var next := global_position + step

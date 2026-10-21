@@ -16,6 +16,7 @@
 [ext_resource type="Script" path="res://systems/spawner/boss_spawner.gd" id="13_boss_spawner"]
 [ext_resource type="PackedScene" path="res://entities/enemies/king_pig/king_pig.tscn" id="14_king_pig"]
 [ext_resource type="Script" path="res://systems/navigation/obstacle_grid.gd" id="15_obstacle_grid"]
+[ext_resource type="Script" path="res://systems/navigation/flow_field.gd" id="16_flow_field"]
 
 [node name="BaseLevel" type="Node3D"]
 script = ExtResource("0_level")
@@ -50,3 +51,6 @@ enemy_spawner = NodePath("../EnemySpawner")
 
 [node name="ObstacleGrid" type="Node" parent="."]
 script = ExtResource("15_obstacle_grid")
+
+[node name="FlowField" type="Node" parent="."]
+script = ExtResource("16_flow_field")
