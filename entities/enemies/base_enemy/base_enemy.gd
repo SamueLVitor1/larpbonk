@@ -14,6 +14,8 @@ extends Node3D
 ## Raio do corpo no chão: olha esse tanto à frente para não enfiar o focinho no
 ## muro (ObstacleGrid). Porco ~0,5; chefes maiores.
 @export var body_radius: float = 0.5
+## Velocidade máxima (m/s) do empurrão para longe dos vizinhos (HordeSeparation).
+@export var separation_speed: float = 2.5
 
 ## Um material só, compartilhado por todos os inimigos: piscar é só ligar/desligar
 ## o overlay em cada malha, sem criar nada novo a cada acerto.
@@ -23,6 +25,8 @@ var target: Node3D
 var _move_speed: float = 3.0
 var _meshes: Array[MeshInstance3D] = []
 var _flash_time_left: float = 0.0
+## Empurrão para longe dos vizinhos (direção × força 0–1), escrito pelo HordeSeparation.
+var separation := Vector3.ZERO
 
 @onready var health: HealthComponent = $HealthComponent
 @onready var hitbox: HitboxComponent = $HitboxComponent
@@ -50,6 +54,7 @@ func on_pool_acquire() -> void:
 ## Voltou para a reserva: deixa de contar como inimigo.
 func on_pool_release() -> void:
 	remove_from_group("enemies")
+	separation = Vector3.ZERO
 	_set_flash(false)
 
 
@@ -69,13 +74,16 @@ func _physics_process(delta: float) -> void:
 			return
 	var to_target := target.global_position - global_position
 	to_target.y = 0.0
-	if to_target.length() <= stop_distance:
-		return
 	var direction := to_target.normalized()
 	# Setinha do campo de fluxo (dá a volta nos muros); sem campo, vai reto.
 	var path := FlowField.direction_at(global_position.x, global_position.z, direction)
-	var step := _slide(path * _move_speed * delta)
 	rotation.y = atan2(path.x, path.z)
+	# Colado no player para de avançar, mas continua sendo empurrado pelos
+	# vizinhos: senão a roda em volta do player vira um bolo de novo.
+	if to_target.length() <= stop_distance:
+		path = Vector3.ZERO
+	var velocity := path * _move_speed + separation * separation_speed
+	var step := _slide(velocity * delta)
 	if step == Vector3.ZERO:
 		return
 	var next := global_position + step
