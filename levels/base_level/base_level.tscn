@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" path="res://ui/menus/pause_menu/pause_menu.tscn" id="12_pause_menu"]
 [ext_resource type="Script" path="res://systems/spawner/boss_spawner.gd" id="13_boss_spawner"]
 [ext_resource type="PackedScene" path="res://entities/enemies/king_pig/king_pig.tscn" id="14_king_pig"]
+[ext_resource type="Script" path="res://systems/navigation/obstacle_grid.gd" id="15_obstacle_grid"]
 
 [node name="BaseLevel" type="Node3D"]
 script = ExtResource("0_level")
@@ -46,3 +47,6 @@ enemy_spawner = NodePath("../EnemySpawner")
 [node name="DeathPuffSpawner" parent="." instance=ExtResource("11_death_puff")]
 
 [node name="PauseMenu" parent="." instance=ExtResource("12_pause_menu")]
+
+[node name="ObstacleGrid" type="Node" parent="."]
+script = ExtResource("15_obstacle_grid")
