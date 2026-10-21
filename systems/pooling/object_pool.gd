@@ -17,6 +17,18 @@ extends Node
 
 var _available: Array[Node] = []
 
+## Todos os pools vivos, para o overlay de debug mostrar quantos objetos cada um
+## tem em uso (achar o que está crescendo quando o FPS cai).
+static var all: Array[ObjectPool] = []
+
+
+func _enter_tree() -> void:
+	all.append(self)
+
+
+func _exit_tree() -> void:
+	all.erase(self)
+
 
 func _ready() -> void:
 	for i in initial_size:
@@ -77,6 +89,11 @@ static func release_or_free(node: Node) -> void:
 
 func available_count() -> int:
 	return _available.size()
+
+
+## Objetos fora da reserva agora (em uso no jogo).
+func active_count() -> int:
+	return get_child_count() - _available.size()
 
 
 func _create() -> Node:

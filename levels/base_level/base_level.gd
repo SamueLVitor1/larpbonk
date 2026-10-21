@@ -30,7 +30,17 @@ func _process(_delta: float) -> void:
 		_debug_label.text = "FPS: %d\nInimigos: %d" % [
 			Engine.get_frames_per_second(),
 			get_tree().get_nodes_in_group("enemies").size(),
-		] + ("\nIMORTAL" if _player_invincible() else "")
+		] + _pools_text() + ("\nIMORTAL" if _player_invincible() else "")
+
+
+## Objetos em uso por pool (gemas, balas, números...), fora a horda já contada acima.
+func _pools_text() -> String:
+	var text := ""
+	for pool in ObjectPool.all:
+		if pool.name == "EnemyPool":
+			continue
+		text += "\n%s: %d" % [pool.name.trim_suffix("Pool"), pool.active_count()]
+	return text
 
 
 func _player_invincible() -> bool:

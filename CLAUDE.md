@@ -47,7 +47,7 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - **`HitboxComponent.hit_once`:** ligado = um acerto e para (bala, `reset()` ao reutilizar); desligado = dano contínuo (contato do inimigo, limitado pela invulnerabilidade do alvo).
 - **Relevo (`HeightTerrain`, `@tool`):** ruído + `TerrainArea` (plano/platô/rampa/lago) → malha low-poly, colisão do player e grade de alturas. Quem não usa física (inimigos, spawner, gemas) pergunta `HeightTerrain.ground_height(x, z)`; sem terreno = 0. Mudou algo e não atualizou no editor → botão **Regerar terreno** no Inspetor.
 - **`TerrainScatter`** (filho do terreno): espalha uma cena (com colisão) ou uma malha (`MultiMesh`, ex.: grama) com semente fixa; as cópias não ficam salvas no `.tscn`.
-- **Debug** (só no editor, em `base_level.gd`, vale para todo mapa): tecla **K** mata todos os inimigos; **G** mostra a grade de obstáculos; **F** mostra as setinhas do campo de fluxo; **I** liga/desliga o player imortal; overlay com FPS e nº de inimigos. Para estresse, trocar o Config do spawner por `data/spawner/stress_spawn.tres`.
+- **Debug** (só no editor, em `base_level.gd`, vale para todo mapa): tecla **K** mata todos os inimigos; **G** mostra a grade de obstáculos; **F** mostra as setinhas do campo de fluxo; **I** liga/desliga o player imortal; overlay com FPS, nº de inimigos e objetos em uso por pool (`ObjectPool.all`, ex.: `Gem: 2400`). Para estresse, trocar o Config do spawner por `data/spawner/stress_spawn.tres`.
 
 ## Camadas de colisão (3D)
 
@@ -64,7 +64,10 @@ Cada funcionalidade guarda cena, script e recursos próprios juntos.
 - Inimigos, projéteis e gemas de XP passam por pooling; evitar `instantiate()`/`queue_free()` em massa.
 - Inimigos não usam física completa por unidade; preferir movimento simples no código.
 - Considerar `MultiMeshInstance3D` para muitos inimigos iguais.
-- Meta de protótipo: 300–500 inimigos na tela com FPS estável. **Medido:** 500 porcos a ~81 FPS (debug, Mac M2), ainda sem MultiMesh. Repetir o teste quando os inimigos pararem de se sobrepor. No Windows (Intel Iris Xe, debug, sem vsync): 500 porcos a ~86 FPS na `test_arena` e no pátio do templo, ~67 FPS no meio do jardim (vegetação + sombras).
+- Meta de protótipo: 300–500 inimigos na tela com FPS estável. **Medido:** 500 porcos a ~81 FPS (debug, Mac M2), ainda sem MultiMesh. No Windows (Intel Iris Xe, debug, sem vsync): 500 porcos a ~86 FPS na `test_arena` e no pátio do templo, ~67 FPS no meio do jardim (vegetação + sombras).
+- **Depois do passo 14** (porcos espalhados, Mac M2, debug): o gargalo é **desenho**, não código (com o jogo pausado o frame continuava em 65 ms). Causas: o porco tem **8 partes/materiais** (500 × 8 = ~4.000 desenhos) e cada sombra redesenha tudo nas cascatas do sol. Tirar a sombra da horda: 65 → ~22 ms. Próximo grande ganho: **MultiMesh da horda** (ver Roadmap 15).
+- **Modelos de horda/props repetidos:** custo = nº de materiais × nº de cópias na tela. Para eles: **1 malha e 1 material** (textura de paleta pequena, UVs nos quadradinhos de cor, filtro Nearest), ~1.000 triângulos no máximo (props 300–800). Player e chefes podem ter mais (são um só).
+- **Teto de vizinhos** no `HordeSeparation` (`max_neighbor_checks`): sem ele, horda espremida num canto vira centenas × centenas de comparações (caiu para 4 FPS).
 
 ## Roadmap (progresso)
 
@@ -143,8 +146,14 @@ Feito em passos pequenos, cada um testado no jogo antes do próximo (e um commit
   - [x] 14.3 Spawner (e `BossSpawner`, que usa a mesma função) não solta inimigo em célula bloqueada
   - [x] 14.4 Balas e obstáculos: **por arma** (`WeaponStats.stopped_by_obstacles`). A orb azul **atravessa** de propósito (mira automática + parar no muro = tiro perdido e frustração); armas futuras (flecha, pedra) podem parar. Checagem em `Projectile._hit_obstacle`, pela grade
   - [x] 14.5 `HordeSeparation` (`systems/navigation/`, na `BaseLevel`): hash espacial por frame (células de 2 m, metade da horda por frame) → `BaseEnemy.separation`, somado ao passo antes do `_slide`
-  - [ ] 14.6 Teste de estresse de novo
+  - [ ] 14.6 Teste de estresse de novo ← *parou aqui*
+    - Feito: horda espalhada a ~22 ms/frame (sem sombra); correção do "bolo" em volta de lanterna/muro (4 → 47 FPS)
+    - **Pendente:** depois de matar o Porco Rei e subir muitos níveis o frame foi a ~91 ms (13 FPS). Suspeita: **gemas acumulando** sem limite (no caos nascem 50 porcos/s). Rodar de novo e ler o overlay (Gem/Projectile/DamageNumber). Se forem as gemas: limite de gemas que, passado, soma o XP numa gema grande
+    - **Pendente:** olhar a aba **Erros (5)** do Depurador
   - [x] 14.7 `FlowField` (`systems/navigation/`, na `BaseLevel`): BFS a partir do player a cada 0,25 s numa janela de 40 m; inimigo segue a setinha da célula (`FlowField.direction_at`) e o `_slide` continua como segurança; tecla **F** (debug) mostra as setinhas
+
+- [ ] 14.8 **Escalada:** player pode subir em lanternas/muros (estruturas escaláveis); inimigos devem escalar também (guardar altura do topo por célula no `ObstacleGrid`, limite tipo 4 m; paredes invisíveis não). **Decidir:** todos escalam ou o Porco Rei fica embaixo?
+- [ ] **15. MultiMesh da horda** (planejar): um `MultiMeshInstance3D` desenha todos os porcos (8 desenhos no total em vez de ~4.000); os nós continuam com a lógica, só o visual sai deles. O piscar branco vira cor por instância (shader). Confirmar antes em Depurador → Monitores → total de draw calls
 
 **Depois:** escolher itens do [BACKLOG.md](BACKLOG.md) (ex.: separação entre inimigos, inimigos/balas colidindo com obstáculos, mais inimigos, mais armas, sons).
 
